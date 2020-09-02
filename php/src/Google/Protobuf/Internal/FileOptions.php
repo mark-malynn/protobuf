@@ -172,6 +172,13 @@ class FileOptions extends \Google\Protobuf\Internal\Message
      */
     protected $ruby_package = null;
     /**
+     * Default value for optimized_container field option. If optimize_container
+     * field option is not explicitly specified, this default is used.
+     *
+     * Generated from protobuf field <code>optional bool optimized_container_default = 46 [default = false];</code>
+     */
+    protected $optimized_container_default = null;
+    /**
      * The parser stores options it doesn't recognize here.
      * See the documentation for the "Options" section above.
      *
@@ -265,6 +272,9 @@ class FileOptions extends \Google\Protobuf\Internal\Message
      *           Use this option to change the package of ruby generated classes. Default
      *           is empty. When this option is not set, the package name will be used for
      *           determining the ruby package.
+     *     @type bool $optimized_container_default
+     *           Default value for optimized_container field option. If optimize_container
+     *           field option is not explicitly specified, this default is used.
      *     @type \Google\Protobuf\Internal\UninterpretedOption[]|\Google\Protobuf\Internal\RepeatedField $uninterpreted_option
      *           The parser stores options it doesn't recognize here.
      *           See the documentation for the "Options" section above.
@@ -1063,6 +1073,44 @@ class FileOptions extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->ruby_package = $var;
+
+        return $this;
+    }
+
+    /**
+     * Default value for optimized_container field option. If optimize_container
+     * field option is not explicitly specified, this default is used.
+     *
+     * Generated from protobuf field <code>optional bool optimized_container_default = 46 [default = false];</code>
+     * @return bool
+     */
+    public function getOptimizedContainerDefault()
+    {
+        return isset($this->optimized_container_default) ? $this->optimized_container_default : false;
+    }
+
+    public function hasOptimizedContainerDefault()
+    {
+        return isset($this->optimized_container_default);
+    }
+
+    public function clearOptimizedContainerDefault()
+    {
+        unset($this->optimized_container_default);
+    }
+
+    /**
+     * Default value for optimized_container field option. If optimize_container
+     * field option is not explicitly specified, this default is used.
+     *
+     * Generated from protobuf field <code>optional bool optimized_container_default = 46 [default = false];</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setOptimizedContainerDefault($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->optimized_container_default = $var;
 
         return $this;
     }

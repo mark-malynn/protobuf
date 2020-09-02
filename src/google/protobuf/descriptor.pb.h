@@ -3537,6 +3537,7 @@ class PROTOBUF_EXPORT FileOptions PROTOBUF_FINAL :
     kPyGenericServicesFieldNumber = 18,
     kPhpGenericServicesFieldNumber = 42,
     kDeprecatedFieldNumber = 23,
+    kOptimizedContainerDefaultFieldNumber = 46,
     kOptimizeForFieldNumber = 9,
     kCcEnableArenasFieldNumber = 31,
   };
@@ -3862,6 +3863,19 @@ class PROTOBUF_EXPORT FileOptions PROTOBUF_FINAL :
   void _internal_set_deprecated(bool value);
   public:
 
+  // optional bool optimized_container_default = 46 [default = false];
+  bool has_optimized_container_default() const;
+  private:
+  bool _internal_has_optimized_container_default() const;
+  public:
+  void clear_optimized_container_default();
+  bool optimized_container_default() const;
+  void set_optimized_container_default(bool value);
+  private:
+  bool _internal_optimized_container_default() const;
+  void _internal_set_optimized_container_default(bool value);
+  public:
+
   // optional .google.protobuf.FileOptions.OptimizeMode optimize_for = 9 [default = SPEED];
   bool has_optimize_for() const;
   private:
@@ -3919,6 +3933,7 @@ class PROTOBUF_EXPORT FileOptions PROTOBUF_FINAL :
   bool py_generic_services_;
   bool php_generic_services_;
   bool deprecated_;
+  bool optimized_container_default_;
   int optimize_for_;
   bool cc_enable_arenas_;
   friend struct ::TableStruct_google_2fprotobuf_2fdescriptor_2eproto;
@@ -4329,8 +4344,9 @@ class PROTOBUF_EXPORT FieldOptions PROTOBUF_FINAL :
     kPackedFieldNumber = 2,
     kLazyFieldNumber = 5,
     kDeprecatedFieldNumber = 3,
-    kWeakFieldNumber = 10,
+    kOptimizedContainerFieldNumber = 7,
     kJstypeFieldNumber = 6,
+    kWeakFieldNumber = 10,
   };
   // repeated .google.protobuf.UninterpretedOption uninterpreted_option = 999;
   int uninterpreted_option_size() const;
@@ -4402,17 +4418,17 @@ class PROTOBUF_EXPORT FieldOptions PROTOBUF_FINAL :
   void _internal_set_deprecated(bool value);
   public:
 
-  // optional bool weak = 10 [default = false];
-  bool has_weak() const;
+  // optional bool optimized_container = 7 [default = false];
+  bool has_optimized_container() const;
   private:
-  bool _internal_has_weak() const;
+  bool _internal_has_optimized_container() const;
   public:
-  void clear_weak();
-  bool weak() const;
-  void set_weak(bool value);
+  void clear_optimized_container();
+  bool optimized_container() const;
+  void set_optimized_container(bool value);
   private:
-  bool _internal_weak() const;
-  void _internal_set_weak(bool value);
+  bool _internal_optimized_container() const;
+  void _internal_set_optimized_container(bool value);
   public:
 
   // optional .google.protobuf.FieldOptions.JSType jstype = 6 [default = JS_NORMAL];
@@ -4426,6 +4442,19 @@ class PROTOBUF_EXPORT FieldOptions PROTOBUF_FINAL :
   private:
   PROTOBUF_NAMESPACE_ID::FieldOptions_JSType _internal_jstype() const;
   void _internal_set_jstype(PROTOBUF_NAMESPACE_ID::FieldOptions_JSType value);
+  public:
+
+  // optional bool weak = 10 [default = false];
+  bool has_weak() const;
+  private:
+  bool _internal_has_weak() const;
+  public:
+  void clear_weak();
+  bool weak() const;
+  void set_weak(bool value);
+  private:
+  bool _internal_weak() const;
+  void _internal_set_weak(bool value);
   public:
 
   GOOGLE_PROTOBUF_EXTENSION_ACCESSORS(FieldOptions)
@@ -4445,8 +4474,9 @@ class PROTOBUF_EXPORT FieldOptions PROTOBUF_FINAL :
   bool packed_;
   bool lazy_;
   bool deprecated_;
-  bool weak_;
+  bool optimized_container_;
   int jstype_;
+  bool weak_;
   friend struct ::TableStruct_google_2fprotobuf_2fdescriptor_2eproto;
 };
 // -------------------------------------------------------------------
@@ -10205,7 +10235,7 @@ inline void FileOptions::set_java_string_check_utf8(bool value) {
 
 // optional .google.protobuf.FileOptions.OptimizeMode optimize_for = 9 [default = SPEED];
 inline bool FileOptions::_internal_has_optimize_for() const {
-  bool value = (_has_bits_[0] & 0x00040000u) != 0;
+  bool value = (_has_bits_[0] & 0x00080000u) != 0;
   return value;
 }
 inline bool FileOptions::has_optimize_for() const {
@@ -10213,7 +10243,7 @@ inline bool FileOptions::has_optimize_for() const {
 }
 inline void FileOptions::clear_optimize_for() {
   optimize_for_ = 1;
-  _has_bits_[0] &= ~0x00040000u;
+  _has_bits_[0] &= ~0x00080000u;
 }
 inline PROTOBUF_NAMESPACE_ID::FileOptions_OptimizeMode FileOptions::_internal_optimize_for() const {
   return static_cast< PROTOBUF_NAMESPACE_ID::FileOptions_OptimizeMode >(optimize_for_);
@@ -10224,7 +10254,7 @@ inline PROTOBUF_NAMESPACE_ID::FileOptions_OptimizeMode FileOptions::optimize_for
 }
 inline void FileOptions::_internal_set_optimize_for(PROTOBUF_NAMESPACE_ID::FileOptions_OptimizeMode value) {
   assert(PROTOBUF_NAMESPACE_ID::FileOptions_OptimizeMode_IsValid(value));
-  _has_bits_[0] |= 0x00040000u;
+  _has_bits_[0] |= 0x00080000u;
   optimize_for_ = value;
 }
 inline void FileOptions::set_optimize_for(PROTOBUF_NAMESPACE_ID::FileOptions_OptimizeMode value) {
@@ -10448,7 +10478,7 @@ inline void FileOptions::set_deprecated(bool value) {
 
 // optional bool cc_enable_arenas = 31 [default = true];
 inline bool FileOptions::_internal_has_cc_enable_arenas() const {
-  bool value = (_has_bits_[0] & 0x00080000u) != 0;
+  bool value = (_has_bits_[0] & 0x00100000u) != 0;
   return value;
 }
 inline bool FileOptions::has_cc_enable_arenas() const {
@@ -10456,7 +10486,7 @@ inline bool FileOptions::has_cc_enable_arenas() const {
 }
 inline void FileOptions::clear_cc_enable_arenas() {
   cc_enable_arenas_ = true;
-  _has_bits_[0] &= ~0x00080000u;
+  _has_bits_[0] &= ~0x00100000u;
 }
 inline bool FileOptions::_internal_cc_enable_arenas() const {
   return cc_enable_arenas_;
@@ -10466,7 +10496,7 @@ inline bool FileOptions::cc_enable_arenas() const {
   return _internal_cc_enable_arenas();
 }
 inline void FileOptions::_internal_set_cc_enable_arenas(bool value) {
-  _has_bits_[0] |= 0x00080000u;
+  _has_bits_[0] |= 0x00100000u;
   cc_enable_arenas_ = value;
 }
 inline void FileOptions::set_cc_enable_arenas(bool value) {
@@ -10992,6 +11022,34 @@ inline void FileOptions::set_allocated_ruby_package(std::string* ruby_package) {
   // @@protoc_insertion_point(field_set_allocated:google.protobuf.FileOptions.ruby_package)
 }
 
+// optional bool optimized_container_default = 46 [default = false];
+inline bool FileOptions::_internal_has_optimized_container_default() const {
+  bool value = (_has_bits_[0] & 0x00040000u) != 0;
+  return value;
+}
+inline bool FileOptions::has_optimized_container_default() const {
+  return _internal_has_optimized_container_default();
+}
+inline void FileOptions::clear_optimized_container_default() {
+  optimized_container_default_ = false;
+  _has_bits_[0] &= ~0x00040000u;
+}
+inline bool FileOptions::_internal_optimized_container_default() const {
+  return optimized_container_default_;
+}
+inline bool FileOptions::optimized_container_default() const {
+  // @@protoc_insertion_point(field_get:google.protobuf.FileOptions.optimized_container_default)
+  return _internal_optimized_container_default();
+}
+inline void FileOptions::_internal_set_optimized_container_default(bool value) {
+  _has_bits_[0] |= 0x00040000u;
+  optimized_container_default_ = value;
+}
+inline void FileOptions::set_optimized_container_default(bool value) {
+  _internal_set_optimized_container_default(value);
+  // @@protoc_insertion_point(field_set:google.protobuf.FileOptions.optimized_container_default)
+}
+
 // repeated .google.protobuf.UninterpretedOption uninterpreted_option = 999;
 inline int FileOptions::_internal_uninterpreted_option_size() const {
   return uninterpreted_option_.size();
@@ -11332,9 +11390,37 @@ inline void FieldOptions::set_deprecated(bool value) {
   // @@protoc_insertion_point(field_set:google.protobuf.FieldOptions.deprecated)
 }
 
+// optional bool optimized_container = 7 [default = false];
+inline bool FieldOptions::_internal_has_optimized_container() const {
+  bool value = (_has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline bool FieldOptions::has_optimized_container() const {
+  return _internal_has_optimized_container();
+}
+inline void FieldOptions::clear_optimized_container() {
+  optimized_container_ = false;
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline bool FieldOptions::_internal_optimized_container() const {
+  return optimized_container_;
+}
+inline bool FieldOptions::optimized_container() const {
+  // @@protoc_insertion_point(field_get:google.protobuf.FieldOptions.optimized_container)
+  return _internal_optimized_container();
+}
+inline void FieldOptions::_internal_set_optimized_container(bool value) {
+  _has_bits_[0] |= 0x00000010u;
+  optimized_container_ = value;
+}
+inline void FieldOptions::set_optimized_container(bool value) {
+  _internal_set_optimized_container(value);
+  // @@protoc_insertion_point(field_set:google.protobuf.FieldOptions.optimized_container)
+}
+
 // optional bool weak = 10 [default = false];
 inline bool FieldOptions::_internal_has_weak() const {
-  bool value = (_has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_has_bits_[0] & 0x00000040u) != 0;
   return value;
 }
 inline bool FieldOptions::has_weak() const {
@@ -11342,7 +11428,7 @@ inline bool FieldOptions::has_weak() const {
 }
 inline void FieldOptions::clear_weak() {
   weak_ = false;
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000040u;
 }
 inline bool FieldOptions::_internal_weak() const {
   return weak_;
@@ -11352,7 +11438,7 @@ inline bool FieldOptions::weak() const {
   return _internal_weak();
 }
 inline void FieldOptions::_internal_set_weak(bool value) {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000040u;
   weak_ = value;
 }
 inline void FieldOptions::set_weak(bool value) {

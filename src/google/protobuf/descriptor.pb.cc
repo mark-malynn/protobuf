@@ -750,20 +750,21 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_google_2fprotobuf_2fdescriptor
   PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::FileOptions, php_namespace_),
   PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::FileOptions, php_metadata_namespace_),
   PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::FileOptions, ruby_package_),
+  PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::FileOptions, optimized_container_default_),
   PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::FileOptions, uninterpreted_option_),
   0,
   1,
   10,
   11,
   12,
-  18,
+  19,
   2,
   13,
   14,
   15,
   16,
   17,
-  19,
+  20,
   3,
   4,
   5,
@@ -771,6 +772,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_google_2fprotobuf_2fdescriptor
   7,
   8,
   9,
+  18,
   ~0u,
   PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::MessageOptions, _has_bits_),
   PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::MessageOptions, _internal_metadata_),
@@ -797,6 +799,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_google_2fprotobuf_2fdescriptor
   PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::FieldOptions, jstype_),
   PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::FieldOptions, lazy_),
   PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::FieldOptions, deprecated_),
+  PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::FieldOptions, optimized_container_),
   PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::FieldOptions, weak_),
   PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::FieldOptions, uninterpreted_option_),
   0,
@@ -805,6 +808,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_google_2fprotobuf_2fdescriptor
   2,
   3,
   4,
+  6,
   ~0u,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(PROTOBUF_NAMESPACE_ID::OneofOptions, _internal_metadata_),
@@ -935,20 +939,20 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 146, 154, sizeof(PROTOBUF_NAMESPACE_ID::EnumValueDescriptorProto)},
   { 157, 165, sizeof(PROTOBUF_NAMESPACE_ID::ServiceDescriptorProto)},
   { 168, 179, sizeof(PROTOBUF_NAMESPACE_ID::MethodDescriptorProto)},
-  { 185, 211, sizeof(PROTOBUF_NAMESPACE_ID::FileOptions)},
-  { 232, 242, sizeof(PROTOBUF_NAMESPACE_ID::MessageOptions)},
-  { 247, 259, sizeof(PROTOBUF_NAMESPACE_ID::FieldOptions)},
-  { 266, -1, sizeof(PROTOBUF_NAMESPACE_ID::OneofOptions)},
-  { 272, 280, sizeof(PROTOBUF_NAMESPACE_ID::EnumOptions)},
-  { 283, 290, sizeof(PROTOBUF_NAMESPACE_ID::EnumValueOptions)},
-  { 292, 299, sizeof(PROTOBUF_NAMESPACE_ID::ServiceOptions)},
-  { 301, 309, sizeof(PROTOBUF_NAMESPACE_ID::MethodOptions)},
-  { 312, 319, sizeof(PROTOBUF_NAMESPACE_ID::UninterpretedOption_NamePart)},
-  { 321, 333, sizeof(PROTOBUF_NAMESPACE_ID::UninterpretedOption)},
-  { 340, 350, sizeof(PROTOBUF_NAMESPACE_ID::SourceCodeInfo_Location)},
-  { 355, -1, sizeof(PROTOBUF_NAMESPACE_ID::SourceCodeInfo)},
-  { 361, 370, sizeof(PROTOBUF_NAMESPACE_ID::GeneratedCodeInfo_Annotation)},
-  { 374, -1, sizeof(PROTOBUF_NAMESPACE_ID::GeneratedCodeInfo)},
+  { 185, 212, sizeof(PROTOBUF_NAMESPACE_ID::FileOptions)},
+  { 234, 244, sizeof(PROTOBUF_NAMESPACE_ID::MessageOptions)},
+  { 249, 262, sizeof(PROTOBUF_NAMESPACE_ID::FieldOptions)},
+  { 270, -1, sizeof(PROTOBUF_NAMESPACE_ID::OneofOptions)},
+  { 276, 284, sizeof(PROTOBUF_NAMESPACE_ID::EnumOptions)},
+  { 287, 294, sizeof(PROTOBUF_NAMESPACE_ID::EnumValueOptions)},
+  { 296, 303, sizeof(PROTOBUF_NAMESPACE_ID::ServiceOptions)},
+  { 305, 313, sizeof(PROTOBUF_NAMESPACE_ID::MethodOptions)},
+  { 316, 323, sizeof(PROTOBUF_NAMESPACE_ID::UninterpretedOption_NamePart)},
+  { 325, 337, sizeof(PROTOBUF_NAMESPACE_ID::UninterpretedOption)},
+  { 344, 354, sizeof(PROTOBUF_NAMESPACE_ID::SourceCodeInfo_Location)},
+  { 359, -1, sizeof(PROTOBUF_NAMESPACE_ID::SourceCodeInfo)},
+  { 365, 374, sizeof(PROTOBUF_NAMESPACE_ID::GeneratedCodeInfo_Annotation)},
+  { 378, -1, sizeof(PROTOBUF_NAMESPACE_ID::GeneratedCodeInfo)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -1055,7 +1059,7 @@ const char descriptor_table_protodef_google_2fprotobuf_2fdescriptor_2eproto[] PR
   "\ninput_type\030\002 \001(\t\022\023\n\013output_type\030\003 \001(\t\022/"
   "\n\007options\030\004 \001(\0132\036.google.protobuf.Method"
   "Options\022\037\n\020client_streaming\030\005 \001(\010:\005false"
-  "\022\037\n\020server_streaming\030\006 \001(\010:\005false\"\245\006\n\013Fi"
+  "\022\037\n\020server_streaming\030\006 \001(\010:\005false\"\321\006\n\013Fi"
   "leOptions\022\024\n\014java_package\030\001 \001(\t\022\034\n\024java_"
   "outer_classname\030\010 \001(\t\022\"\n\023java_multiple_f"
   "iles\030\n \001(\010:\005false\022)\n\035java_generate_equal"
@@ -1072,22 +1076,24 @@ const char descriptor_table_protodef_google_2fprotobuf_2fdescriptor_2eproto[] PR
   "pace\030% \001(\t\022\024\n\014swift_prefix\030\' \001(\t\022\030\n\020php_"
   "class_prefix\030( \001(\t\022\025\n\rphp_namespace\030) \001("
   "\t\022\036\n\026php_metadata_namespace\030, \001(\t\022\024\n\014rub"
-  "y_package\030- \001(\t\022C\n\024uninterpreted_option\030"
-  "\347\007 \003(\0132$.google.protobuf.UninterpretedOp"
-  "tion\":\n\014OptimizeMode\022\t\n\005SPEED\020\001\022\r\n\tCODE_"
-  "SIZE\020\002\022\020\n\014LITE_RUNTIME\020\003*\t\010\350\007\020\200\200\200\200\002J\004\010&\020"
-  "\'\"\362\001\n\016MessageOptions\022&\n\027message_set_wire"
-  "_format\030\001 \001(\010:\005false\022.\n\037no_standard_desc"
-  "riptor_accessor\030\002 \001(\010:\005false\022\031\n\ndeprecat"
-  "ed\030\003 \001(\010:\005false\022\021\n\tmap_entry\030\007 \001(\010\022C\n\024un"
-  "interpreted_option\030\347\007 \003(\0132$.google.proto"
-  "buf.UninterpretedOption*\t\010\350\007\020\200\200\200\200\002J\004\010\010\020\t"
-  "J\004\010\t\020\n\"\236\003\n\014FieldOptions\022:\n\005ctype\030\001 \001(\0162#"
-  ".google.protobuf.FieldOptions.CType:\006STR"
-  "ING\022\016\n\006packed\030\002 \001(\010\022\?\n\006jstype\030\006 \001(\0162$.go"
-  "ogle.protobuf.FieldOptions.JSType:\tJS_NO"
-  "RMAL\022\023\n\004lazy\030\005 \001(\010:\005false\022\031\n\ndeprecated\030"
-  "\003 \001(\010:\005false\022\023\n\004weak\030\n \001(\010:\005false\022C\n\024uni"
+  "y_package\030- \001(\t\022*\n\033optimized_container_d"
+  "efault\030. \001(\010:\005false\022C\n\024uninterpreted_opt"
+  "ion\030\347\007 \003(\0132$.google.protobuf.Uninterpret"
+  "edOption\":\n\014OptimizeMode\022\t\n\005SPEED\020\001\022\r\n\tC"
+  "ODE_SIZE\020\002\022\020\n\014LITE_RUNTIME\020\003*\t\010\350\007\020\200\200\200\200\002J"
+  "\004\010&\020\'\"\362\001\n\016MessageOptions\022&\n\027message_set_"
+  "wire_format\030\001 \001(\010:\005false\022.\n\037no_standard_"
+  "descriptor_accessor\030\002 \001(\010:\005false\022\031\n\ndepr"
+  "ecated\030\003 \001(\010:\005false\022\021\n\tmap_entry\030\007 \001(\010\022C"
+  "\n\024uninterpreted_option\030\347\007 \003(\0132$.google.p"
+  "rotobuf.UninterpretedOption*\t\010\350\007\020\200\200\200\200\002J\004"
+  "\010\010\020\tJ\004\010\t\020\n\"\302\003\n\014FieldOptions\022:\n\005ctype\030\001 \001"
+  "(\0162#.google.protobuf.FieldOptions.CType:"
+  "\006STRING\022\016\n\006packed\030\002 \001(\010\022\?\n\006jstype\030\006 \001(\0162"
+  "$.google.protobuf.FieldOptions.JSType:\tJ"
+  "S_NORMAL\022\023\n\004lazy\030\005 \001(\010:\005false\022\031\n\ndepreca"
+  "ted\030\003 \001(\010:\005false\022\"\n\023optimized_container\030"
+  "\007 \001(\010:\005false\022\023\n\004weak\030\n \001(\010:\005false\022C\n\024uni"
   "nterpreted_option\030\347\007 \003(\0132$.google.protob"
   "uf.UninterpretedOption\"/\n\005CType\022\n\n\006STRIN"
   "G\020\000\022\010\n\004CORD\020\001\022\020\n\014STRING_PIECE\020\002\"5\n\006JSTyp"
@@ -1167,7 +1173,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_goo
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_google_2fprotobuf_2fdescriptor_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_google_2fprotobuf_2fdescriptor_2eproto = {
-  false, false, descriptor_table_protodef_google_2fprotobuf_2fdescriptor_2eproto, "google/protobuf/descriptor.proto", 6028,
+  false, false, descriptor_table_protodef_google_2fprotobuf_2fdescriptor_2eproto, "google/protobuf/descriptor.proto", 6108,
   &descriptor_table_google_2fprotobuf_2fdescriptor_2eproto_once, descriptor_table_google_2fprotobuf_2fdescriptor_2eproto_sccs, descriptor_table_google_2fprotobuf_2fdescriptor_2eproto_deps, 27, 0,
   schemas, file_default_instances, TableStruct_google_2fprotobuf_2fdescriptor_2eproto::offsets,
   file_level_metadata_google_2fprotobuf_2fdescriptor_2eproto, 27, file_level_enum_descriptors_google_2fprotobuf_2fdescriptor_2eproto, file_level_service_descriptors_google_2fprotobuf_2fdescriptor_2eproto,
@@ -6153,7 +6159,7 @@ class FileOptions::_Internal {
     (*has_bits)[0] |= 4096u;
   }
   static void set_has_optimize_for(HasBits* has_bits) {
-    (*has_bits)[0] |= 262144u;
+    (*has_bits)[0] |= 524288u;
   }
   static void set_has_go_package(HasBits* has_bits) {
     (*has_bits)[0] |= 4u;
@@ -6174,7 +6180,7 @@ class FileOptions::_Internal {
     (*has_bits)[0] |= 131072u;
   }
   static void set_has_cc_enable_arenas(HasBits* has_bits) {
-    (*has_bits)[0] |= 524288u;
+    (*has_bits)[0] |= 1048576u;
   }
   static void set_has_objc_class_prefix(HasBits* has_bits) {
     (*has_bits)[0] |= 8u;
@@ -6196,6 +6202,9 @@ class FileOptions::_Internal {
   }
   static void set_has_ruby_package(HasBits* has_bits) {
     (*has_bits)[0] |= 512u;
+  }
+  static void set_has_optimized_container_default(HasBits* has_bits) {
+    (*has_bits)[0] |= 262144u;
   }
 };
 
@@ -6282,8 +6291,8 @@ void FileOptions::SharedCtor() {
   php_metadata_namespace_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ruby_package_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&java_multiple_files_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&deprecated_) -
-      reinterpret_cast<char*>(&java_multiple_files_)) + sizeof(deprecated_));
+      reinterpret_cast<char*>(&optimized_container_default_) -
+      reinterpret_cast<char*>(&java_multiple_files_)) + sizeof(optimized_container_default_));
   optimize_for_ = 1;
   cc_enable_arenas_ = true;
 }
@@ -6371,10 +6380,10 @@ void FileOptions::Clear() {
         reinterpret_cast<char*>(&py_generic_services_) -
         reinterpret_cast<char*>(&java_multiple_files_)) + sizeof(py_generic_services_));
   }
-  if (cached_has_bits & 0x000f0000u) {
+  if (cached_has_bits & 0x001f0000u) {
     ::memset(&php_generic_services_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&deprecated_) -
-        reinterpret_cast<char*>(&php_generic_services_)) + sizeof(deprecated_));
+        reinterpret_cast<char*>(&optimized_container_default_) -
+        reinterpret_cast<char*>(&php_generic_services_)) + sizeof(optimized_container_default_));
     optimize_for_ = 1;
     cc_enable_arenas_ = true;
   }
@@ -6585,6 +6594,14 @@ const char* FileOptions::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
+      // optional bool optimized_container_default = 46 [default = false];
+      case 46:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 112)) {
+          _Internal::set_has_optimized_container_default(&has_bits);
+          optimized_container_default_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       // repeated .google.protobuf.UninterpretedOption uninterpreted_option = 999;
       case 999:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 58)) {
@@ -6654,7 +6671,7 @@ failure:
   }
 
   // optional .google.protobuf.FileOptions.OptimizeMode optimize_for = 9 [default = SPEED];
-  if (cached_has_bits & 0x00040000u) {
+  if (cached_has_bits & 0x00080000u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
       9, this->_internal_optimize_for(), target);
@@ -6713,7 +6730,7 @@ failure:
   }
 
   // optional bool cc_enable_arenas = 31 [default = true];
-  if (cached_has_bits & 0x00080000u) {
+  if (cached_has_bits & 0x00100000u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(31, this->_internal_cc_enable_arenas(), target);
   }
@@ -6792,6 +6809,12 @@ failure:
       "google.protobuf.FileOptions.ruby_package");
     target = stream->WriteStringMaybeAliased(
         45, this->_internal_ruby_package(), target);
+  }
+
+  // optional bool optimized_container_default = 46 [default = false];
+  if (cached_has_bits & 0x00040000u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(46, this->_internal_optimized_container_default(), target);
   }
 
   // repeated .google.protobuf.UninterpretedOption uninterpreted_option = 999;
@@ -6936,7 +6959,7 @@ size_t FileOptions::ByteSizeLong() const {
     }
 
   }
-  if (cached_has_bits & 0x000f0000u) {
+  if (cached_has_bits & 0x001f0000u) {
     // optional bool php_generic_services = 42 [default = false];
     if (cached_has_bits & 0x00010000u) {
       total_size += 2 + 1;
@@ -6947,14 +6970,19 @@ size_t FileOptions::ByteSizeLong() const {
       total_size += 2 + 1;
     }
 
-    // optional .google.protobuf.FileOptions.OptimizeMode optimize_for = 9 [default = SPEED];
+    // optional bool optimized_container_default = 46 [default = false];
     if (cached_has_bits & 0x00040000u) {
+      total_size += 2 + 1;
+    }
+
+    // optional .google.protobuf.FileOptions.OptimizeMode optimize_for = 9 [default = SPEED];
+    if (cached_has_bits & 0x00080000u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_optimize_for());
     }
 
     // optional bool cc_enable_arenas = 31 [default = true];
-    if (cached_has_bits & 0x00080000u) {
+    if (cached_has_bits & 0x00100000u) {
       total_size += 2 + 1;
     }
 
@@ -7046,7 +7074,7 @@ void FileOptions::MergeFrom(const FileOptions& from) {
     }
     _has_bits_[0] |= cached_has_bits;
   }
-  if (cached_has_bits & 0x000f0000u) {
+  if (cached_has_bits & 0x001f0000u) {
     if (cached_has_bits & 0x00010000u) {
       php_generic_services_ = from.php_generic_services_;
     }
@@ -7054,9 +7082,12 @@ void FileOptions::MergeFrom(const FileOptions& from) {
       deprecated_ = from.deprecated_;
     }
     if (cached_has_bits & 0x00040000u) {
-      optimize_for_ = from.optimize_for_;
+      optimized_container_default_ = from.optimized_container_default_;
     }
     if (cached_has_bits & 0x00080000u) {
+      optimize_for_ = from.optimize_for_;
+    }
+    if (cached_has_bits & 0x00100000u) {
       cc_enable_arenas_ = from.cc_enable_arenas_;
     }
     _has_bits_[0] |= cached_has_bits;
@@ -7103,8 +7134,8 @@ void FileOptions::InternalSwap(FileOptions* other) {
   php_metadata_namespace_.Swap(&other->php_metadata_namespace_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   ruby_package_.Swap(&other->ruby_package_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(FileOptions, deprecated_)
-      + sizeof(FileOptions::deprecated_)
+      PROTOBUF_FIELD_OFFSET(FileOptions, optimized_container_default_)
+      + sizeof(FileOptions::optimized_container_default_)
       - PROTOBUF_FIELD_OFFSET(FileOptions, java_multiple_files_)>(
           reinterpret_cast<char*>(&java_multiple_files_),
           reinterpret_cast<char*>(&other->java_multiple_files_));
@@ -7489,8 +7520,11 @@ class FieldOptions::_Internal {
   static void set_has_deprecated(HasBits* has_bits) {
     (*has_bits)[0] |= 8u;
   }
-  static void set_has_weak(HasBits* has_bits) {
+  static void set_has_optimized_container(HasBits* has_bits) {
     (*has_bits)[0] |= 16u;
+  }
+  static void set_has_weak(HasBits* has_bits) {
+    (*has_bits)[0] |= 64u;
   }
 };
 
@@ -7509,16 +7543,16 @@ FieldOptions::FieldOptions(const FieldOptions& from)
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   _extensions_.MergeFrom(from._extensions_);
   ::memcpy(&ctype_, &from.ctype_,
-    static_cast<size_t>(reinterpret_cast<char*>(&jstype_) -
-    reinterpret_cast<char*>(&ctype_)) + sizeof(jstype_));
+    static_cast<size_t>(reinterpret_cast<char*>(&weak_) -
+    reinterpret_cast<char*>(&ctype_)) + sizeof(weak_));
   // @@protoc_insertion_point(copy_constructor:google.protobuf.FieldOptions)
 }
 
 void FieldOptions::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_FieldOptions_google_2fprotobuf_2fdescriptor_2eproto.base);
   ::memset(&ctype_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&jstype_) -
-      reinterpret_cast<char*>(&ctype_)) + sizeof(jstype_));
+      reinterpret_cast<char*>(&weak_) -
+      reinterpret_cast<char*>(&ctype_)) + sizeof(weak_));
 }
 
 FieldOptions::~FieldOptions() {
@@ -7555,10 +7589,10 @@ void FieldOptions::Clear() {
   _extensions_.Clear();
   uninterpreted_option_.Clear();
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x0000003fu) {
+  if (cached_has_bits & 0x0000007fu) {
     ::memset(&ctype_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&jstype_) -
-        reinterpret_cast<char*>(&ctype_)) + sizeof(jstype_));
+        reinterpret_cast<char*>(&weak_) -
+        reinterpret_cast<char*>(&ctype_)) + sizeof(weak_));
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
@@ -7619,6 +7653,14 @@ const char* FieldOptions::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
           } else {
             ::PROTOBUF_NAMESPACE_ID::internal::WriteVarint(6, val, mutable_unknown_fields());
           }
+        } else goto handle_unusual;
+        continue;
+      // optional bool optimized_container = 7 [default = false];
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 56)) {
+          _Internal::set_has_optimized_container(&has_bits);
+          optimized_container_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
         } else goto handle_unusual;
         continue;
       // optional bool weak = 10 [default = false];
@@ -7709,8 +7751,14 @@ failure:
       6, this->_internal_jstype(), target);
   }
 
-  // optional bool weak = 10 [default = false];
+  // optional bool optimized_container = 7 [default = false];
   if (cached_has_bits & 0x00000010u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(7, this->_internal_optimized_container(), target);
+  }
+
+  // optional bool weak = 10 [default = false];
+  if (cached_has_bits & 0x00000040u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(10, this->_internal_weak(), target);
   }
@@ -7753,7 +7801,7 @@ size_t FieldOptions::ByteSizeLong() const {
   }
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x0000003fu) {
+  if (cached_has_bits & 0x0000007fu) {
     // optional .google.protobuf.FieldOptions.CType ctype = 1 [default = STRING];
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
@@ -7775,7 +7823,7 @@ size_t FieldOptions::ByteSizeLong() const {
       total_size += 1 + 1;
     }
 
-    // optional bool weak = 10 [default = false];
+    // optional bool optimized_container = 7 [default = false];
     if (cached_has_bits & 0x00000010u) {
       total_size += 1 + 1;
     }
@@ -7784,6 +7832,11 @@ size_t FieldOptions::ByteSizeLong() const {
     if (cached_has_bits & 0x00000020u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_jstype());
+    }
+
+    // optional bool weak = 10 [default = false];
+    if (cached_has_bits & 0x00000040u) {
+      total_size += 1 + 1;
     }
 
   }
@@ -7821,7 +7874,7 @@ void FieldOptions::MergeFrom(const FieldOptions& from) {
 
   uninterpreted_option_.MergeFrom(from.uninterpreted_option_);
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x0000003fu) {
+  if (cached_has_bits & 0x0000007fu) {
     if (cached_has_bits & 0x00000001u) {
       ctype_ = from.ctype_;
     }
@@ -7835,10 +7888,13 @@ void FieldOptions::MergeFrom(const FieldOptions& from) {
       deprecated_ = from.deprecated_;
     }
     if (cached_has_bits & 0x00000010u) {
-      weak_ = from.weak_;
+      optimized_container_ = from.optimized_container_;
     }
     if (cached_has_bits & 0x00000020u) {
       jstype_ = from.jstype_;
+    }
+    if (cached_has_bits & 0x00000040u) {
+      weak_ = from.weak_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -7874,8 +7930,8 @@ void FieldOptions::InternalSwap(FieldOptions* other) {
   swap(_has_bits_[0], other->_has_bits_[0]);
   uninterpreted_option_.InternalSwap(&other->uninterpreted_option_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(FieldOptions, jstype_)
-      + sizeof(FieldOptions::jstype_)
+      PROTOBUF_FIELD_OFFSET(FieldOptions, weak_)
+      + sizeof(FieldOptions::weak_)
       - PROTOBUF_FIELD_OFFSET(FieldOptions, ctype_)>(
           reinterpret_cast<char*>(&ctype_),
           reinterpret_cast<char*>(&other->ctype_));

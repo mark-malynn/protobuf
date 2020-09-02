@@ -88,6 +88,10 @@ class FieldOptions extends \Google\Protobuf\Internal\Message
      */
     protected $deprecated = null;
     /**
+     * Generated from protobuf field <code>optional bool optimized_container = 7 [default = false];</code>
+     */
+    protected $optimized_container = null;
+    /**
      * For Google-internal migration only. Do not use.
      *
      * Generated from protobuf field <code>optional bool weak = 10 [default = false];</code>
@@ -158,6 +162,7 @@ class FieldOptions extends \Google\Protobuf\Internal\Message
      *           Depending on the target platform, this can emit Deprecated annotations
      *           for accessors, or it will be completely ignored; in the very least, this
      *           is a formalization for deprecating fields.
+     *     @type bool $optimized_container
      *     @type bool $weak
      *           For Google-internal migration only. Do not use.
      *     @type \Google\Protobuf\Internal\UninterpretedOption[]|\Google\Protobuf\Internal\RepeatedField $uninterpreted_option
@@ -429,6 +434,38 @@ class FieldOptions extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkBool($var);
         $this->deprecated = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>optional bool optimized_container = 7 [default = false];</code>
+     * @return bool
+     */
+    public function getOptimizedContainer()
+    {
+        return isset($this->optimized_container) ? $this->optimized_container : false;
+    }
+
+    public function hasOptimizedContainer()
+    {
+        return isset($this->optimized_container);
+    }
+
+    public function clearOptimizedContainer()
+    {
+        unset($this->optimized_container);
+    }
+
+    /**
+     * Generated from protobuf field <code>optional bool optimized_container = 7 [default = false];</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setOptimizedContainer($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->optimized_container = $var;
 
         return $this;
     }

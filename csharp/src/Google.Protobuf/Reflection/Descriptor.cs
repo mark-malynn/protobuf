@@ -89,7 +89,7 @@ namespace Google.Protobuf.Reflection {
             "ZRgBIAEoCRISCgppbnB1dF90eXBlGAIgASgJEhMKC291dHB1dF90eXBlGAMg",
             "ASgJEi8KB29wdGlvbnMYBCABKAsyHi5nb29nbGUucHJvdG9idWYuTWV0aG9k",
             "T3B0aW9ucxIfChBjbGllbnRfc3RyZWFtaW5nGAUgASgIOgVmYWxzZRIfChBz",
-            "ZXJ2ZXJfc3RyZWFtaW5nGAYgASgIOgVmYWxzZSKlBgoLRmlsZU9wdGlvbnMS",
+            "ZXJ2ZXJfc3RyZWFtaW5nGAYgASgIOgVmYWxzZSLRBgoLRmlsZU9wdGlvbnMS",
             "FAoMamF2YV9wYWNrYWdlGAEgASgJEhwKFGphdmFfb3V0ZXJfY2xhc3NuYW1l",
             "GAggASgJEiIKE2phdmFfbXVsdGlwbGVfZmlsZXMYCiABKAg6BWZhbHNlEikK",
             "HWphdmFfZ2VuZXJhdGVfZXF1YWxzX2FuZF9oYXNoGBQgASgIQgIYARIlChZq",
@@ -104,60 +104,62 @@ namespace Google.Protobuf.Reflection {
             "GAoQY3NoYXJwX25hbWVzcGFjZRglIAEoCRIUCgxzd2lmdF9wcmVmaXgYJyAB",
             "KAkSGAoQcGhwX2NsYXNzX3ByZWZpeBgoIAEoCRIVCg1waHBfbmFtZXNwYWNl",
             "GCkgASgJEh4KFnBocF9tZXRhZGF0YV9uYW1lc3BhY2UYLCABKAkSFAoMcnVi",
-            "eV9wYWNrYWdlGC0gASgJEkMKFHVuaW50ZXJwcmV0ZWRfb3B0aW9uGOcHIAMo",
-            "CzIkLmdvb2dsZS5wcm90b2J1Zi5VbmludGVycHJldGVkT3B0aW9uIjoKDE9w",
-            "dGltaXplTW9kZRIJCgVTUEVFRBABEg0KCUNPREVfU0laRRACEhAKDExJVEVf",
-            "UlVOVElNRRADKgkI6AcQgICAgAJKBAgmECci8gEKDk1lc3NhZ2VPcHRpb25z",
-            "EiYKF21lc3NhZ2Vfc2V0X3dpcmVfZm9ybWF0GAEgASgIOgVmYWxzZRIuCh9u",
-            "b19zdGFuZGFyZF9kZXNjcmlwdG9yX2FjY2Vzc29yGAIgASgIOgVmYWxzZRIZ",
-            "CgpkZXByZWNhdGVkGAMgASgIOgVmYWxzZRIRCgltYXBfZW50cnkYByABKAgS",
-            "QwoUdW5pbnRlcnByZXRlZF9vcHRpb24Y5wcgAygLMiQuZ29vZ2xlLnByb3Rv",
-            "YnVmLlVuaW50ZXJwcmV0ZWRPcHRpb24qCQjoBxCAgICAAkoECAgQCUoECAkQ",
-            "CiKeAwoMRmllbGRPcHRpb25zEjoKBWN0eXBlGAEgASgOMiMuZ29vZ2xlLnBy",
-            "b3RvYnVmLkZpZWxkT3B0aW9ucy5DVHlwZToGU1RSSU5HEg4KBnBhY2tlZBgC",
-            "IAEoCBI/CgZqc3R5cGUYBiABKA4yJC5nb29nbGUucHJvdG9idWYuRmllbGRP",
-            "cHRpb25zLkpTVHlwZToJSlNfTk9STUFMEhMKBGxhenkYBSABKAg6BWZhbHNl",
-            "EhkKCmRlcHJlY2F0ZWQYAyABKAg6BWZhbHNlEhMKBHdlYWsYCiABKAg6BWZh",
-            "bHNlEkMKFHVuaW50ZXJwcmV0ZWRfb3B0aW9uGOcHIAMoCzIkLmdvb2dsZS5w",
-            "cm90b2J1Zi5VbmludGVycHJldGVkT3B0aW9uIi8KBUNUeXBlEgoKBlNUUklO",
-            "RxAAEggKBENPUkQQARIQCgxTVFJJTkdfUElFQ0UQAiI1CgZKU1R5cGUSDQoJ",
-            "SlNfTk9STUFMEAASDQoJSlNfU1RSSU5HEAESDQoJSlNfTlVNQkVSEAIqCQjo",
-            "BxCAgICAAkoECAQQBSJeCgxPbmVvZk9wdGlvbnMSQwoUdW5pbnRlcnByZXRl",
-            "ZF9vcHRpb24Y5wcgAygLMiQuZ29vZ2xlLnByb3RvYnVmLlVuaW50ZXJwcmV0",
-            "ZWRPcHRpb24qCQjoBxCAgICAAiKTAQoLRW51bU9wdGlvbnMSEwoLYWxsb3df",
-            "YWxpYXMYAiABKAgSGQoKZGVwcmVjYXRlZBgDIAEoCDoFZmFsc2USQwoUdW5p",
+            "eV9wYWNrYWdlGC0gASgJEioKG29wdGltaXplZF9jb250YWluZXJfZGVmYXVs",
+            "dBguIAEoCDoFZmFsc2USQwoUdW5pbnRlcnByZXRlZF9vcHRpb24Y5wcgAygL",
+            "MiQuZ29vZ2xlLnByb3RvYnVmLlVuaW50ZXJwcmV0ZWRPcHRpb24iOgoMT3B0",
+            "aW1pemVNb2RlEgkKBVNQRUVEEAESDQoJQ09ERV9TSVpFEAISEAoMTElURV9S",
+            "VU5USU1FEAMqCQjoBxCAgICAAkoECCYQJyLyAQoOTWVzc2FnZU9wdGlvbnMS",
+            "JgoXbWVzc2FnZV9zZXRfd2lyZV9mb3JtYXQYASABKAg6BWZhbHNlEi4KH25v",
+            "X3N0YW5kYXJkX2Rlc2NyaXB0b3JfYWNjZXNzb3IYAiABKAg6BWZhbHNlEhkK",
+            "CmRlcHJlY2F0ZWQYAyABKAg6BWZhbHNlEhEKCW1hcF9lbnRyeRgHIAEoCBJD",
+            "ChR1bmludGVycHJldGVkX29wdGlvbhjnByADKAsyJC5nb29nbGUucHJvdG9i",
+            "dWYuVW5pbnRlcnByZXRlZE9wdGlvbioJCOgHEICAgIACSgQICBAJSgQICRAK",
+            "IsIDCgxGaWVsZE9wdGlvbnMSOgoFY3R5cGUYASABKA4yIy5nb29nbGUucHJv",
+            "dG9idWYuRmllbGRPcHRpb25zLkNUeXBlOgZTVFJJTkcSDgoGcGFja2VkGAIg",
+            "ASgIEj8KBmpzdHlwZRgGIAEoDjIkLmdvb2dsZS5wcm90b2J1Zi5GaWVsZE9w",
+            "dGlvbnMuSlNUeXBlOglKU19OT1JNQUwSEwoEbGF6eRgFIAEoCDoFZmFsc2US",
+            "GQoKZGVwcmVjYXRlZBgDIAEoCDoFZmFsc2USIgoTb3B0aW1pemVkX2NvbnRh",
+            "aW5lchgHIAEoCDoFZmFsc2USEwoEd2VhaxgKIAEoCDoFZmFsc2USQwoUdW5p",
             "bnRlcnByZXRlZF9vcHRpb24Y5wcgAygLMiQuZ29vZ2xlLnByb3RvYnVmLlVu",
-            "aW50ZXJwcmV0ZWRPcHRpb24qCQjoBxCAgICAAkoECAUQBiJ9ChBFbnVtVmFs",
-            "dWVPcHRpb25zEhkKCmRlcHJlY2F0ZWQYASABKAg6BWZhbHNlEkMKFHVuaW50",
-            "ZXJwcmV0ZWRfb3B0aW9uGOcHIAMoCzIkLmdvb2dsZS5wcm90b2J1Zi5Vbmlu",
-            "dGVycHJldGVkT3B0aW9uKgkI6AcQgICAgAIiewoOU2VydmljZU9wdGlvbnMS",
-            "GQoKZGVwcmVjYXRlZBghIAEoCDoFZmFsc2USQwoUdW5pbnRlcnByZXRlZF9v",
+            "aW50ZXJwcmV0ZWRPcHRpb24iLwoFQ1R5cGUSCgoGU1RSSU5HEAASCAoEQ09S",
+            "RBABEhAKDFNUUklOR19QSUVDRRACIjUKBkpTVHlwZRINCglKU19OT1JNQUwQ",
+            "ABINCglKU19TVFJJTkcQARINCglKU19OVU1CRVIQAioJCOgHEICAgIACSgQI",
+            "BBAFIl4KDE9uZW9mT3B0aW9ucxJDChR1bmludGVycHJldGVkX29wdGlvbhjn",
+            "ByADKAsyJC5nb29nbGUucHJvdG9idWYuVW5pbnRlcnByZXRlZE9wdGlvbioJ",
+            "COgHEICAgIACIpMBCgtFbnVtT3B0aW9ucxITCgthbGxvd19hbGlhcxgCIAEo",
+            "CBIZCgpkZXByZWNhdGVkGAMgASgIOgVmYWxzZRJDChR1bmludGVycHJldGVk",
+            "X29wdGlvbhjnByADKAsyJC5nb29nbGUucHJvdG9idWYuVW5pbnRlcnByZXRl",
+            "ZE9wdGlvbioJCOgHEICAgIACSgQIBRAGIn0KEEVudW1WYWx1ZU9wdGlvbnMS",
+            "GQoKZGVwcmVjYXRlZBgBIAEoCDoFZmFsc2USQwoUdW5pbnRlcnByZXRlZF9v",
             "cHRpb24Y5wcgAygLMiQuZ29vZ2xlLnByb3RvYnVmLlVuaW50ZXJwcmV0ZWRP",
-            "cHRpb24qCQjoBxCAgICAAiKtAgoNTWV0aG9kT3B0aW9ucxIZCgpkZXByZWNh",
-            "dGVkGCEgASgIOgVmYWxzZRJfChFpZGVtcG90ZW5jeV9sZXZlbBgiIAEoDjIv",
-            "Lmdvb2dsZS5wcm90b2J1Zi5NZXRob2RPcHRpb25zLklkZW1wb3RlbmN5TGV2",
-            "ZWw6E0lERU1QT1RFTkNZX1VOS05PV04SQwoUdW5pbnRlcnByZXRlZF9vcHRp",
-            "b24Y5wcgAygLMiQuZ29vZ2xlLnByb3RvYnVmLlVuaW50ZXJwcmV0ZWRPcHRp",
-            "b24iUAoQSWRlbXBvdGVuY3lMZXZlbBIXChNJREVNUE9URU5DWV9VTktOT1dO",
-            "EAASEwoPTk9fU0lERV9FRkZFQ1RTEAESDgoKSURFTVBPVEVOVBACKgkI6AcQ",
-            "gICAgAIingIKE1VuaW50ZXJwcmV0ZWRPcHRpb24SOwoEbmFtZRgCIAMoCzIt",
-            "Lmdvb2dsZS5wcm90b2J1Zi5VbmludGVycHJldGVkT3B0aW9uLk5hbWVQYXJ0",
-            "EhgKEGlkZW50aWZpZXJfdmFsdWUYAyABKAkSGgoScG9zaXRpdmVfaW50X3Zh",
-            "bHVlGAQgASgEEhoKEm5lZ2F0aXZlX2ludF92YWx1ZRgFIAEoAxIUCgxkb3Vi",
-            "bGVfdmFsdWUYBiABKAESFAoMc3RyaW5nX3ZhbHVlGAcgASgMEhcKD2FnZ3Jl",
-            "Z2F0ZV92YWx1ZRgIIAEoCRozCghOYW1lUGFydBIRCgluYW1lX3BhcnQYASAC",
-            "KAkSFAoMaXNfZXh0ZW5zaW9uGAIgAigIItUBCg5Tb3VyY2VDb2RlSW5mbxI6",
-            "Cghsb2NhdGlvbhgBIAMoCzIoLmdvb2dsZS5wcm90b2J1Zi5Tb3VyY2VDb2Rl",
-            "SW5mby5Mb2NhdGlvbhqGAQoITG9jYXRpb24SEAoEcGF0aBgBIAMoBUICEAES",
-            "EAoEc3BhbhgCIAMoBUICEAESGAoQbGVhZGluZ19jb21tZW50cxgDIAEoCRIZ",
-            "ChF0cmFpbGluZ19jb21tZW50cxgEIAEoCRIhChlsZWFkaW5nX2RldGFjaGVk",
-            "X2NvbW1lbnRzGAYgAygJIqcBChFHZW5lcmF0ZWRDb2RlSW5mbxJBCgphbm5v",
-            "dGF0aW9uGAEgAygLMi0uZ29vZ2xlLnByb3RvYnVmLkdlbmVyYXRlZENvZGVJ",
-            "bmZvLkFubm90YXRpb24aTwoKQW5ub3RhdGlvbhIQCgRwYXRoGAEgAygFQgIQ",
-            "ARITCgtzb3VyY2VfZmlsZRgCIAEoCRINCgViZWdpbhgDIAEoBRILCgNlbmQY",
-            "BCABKAVCfgoTY29tLmdvb2dsZS5wcm90b2J1ZkIQRGVzY3JpcHRvclByb3Rv",
-            "c0gBWi1nb29nbGUuZ29sYW5nLm9yZy9wcm90b2J1Zi90eXBlcy9kZXNjcmlw",
-            "dG9ycGL4AQGiAgNHUEKqAhpHb29nbGUuUHJvdG9idWYuUmVmbGVjdGlvbg=="));
+            "cHRpb24qCQjoBxCAgICAAiJ7Cg5TZXJ2aWNlT3B0aW9ucxIZCgpkZXByZWNh",
+            "dGVkGCEgASgIOgVmYWxzZRJDChR1bmludGVycHJldGVkX29wdGlvbhjnByAD",
+            "KAsyJC5nb29nbGUucHJvdG9idWYuVW5pbnRlcnByZXRlZE9wdGlvbioJCOgH",
+            "EICAgIACIq0CCg1NZXRob2RPcHRpb25zEhkKCmRlcHJlY2F0ZWQYISABKAg6",
+            "BWZhbHNlEl8KEWlkZW1wb3RlbmN5X2xldmVsGCIgASgOMi8uZ29vZ2xlLnBy",
+            "b3RvYnVmLk1ldGhvZE9wdGlvbnMuSWRlbXBvdGVuY3lMZXZlbDoTSURFTVBP",
+            "VEVOQ1lfVU5LTk9XThJDChR1bmludGVycHJldGVkX29wdGlvbhjnByADKAsy",
+            "JC5nb29nbGUucHJvdG9idWYuVW5pbnRlcnByZXRlZE9wdGlvbiJQChBJZGVt",
+            "cG90ZW5jeUxldmVsEhcKE0lERU1QT1RFTkNZX1VOS05PV04QABITCg9OT19T",
+            "SURFX0VGRkVDVFMQARIOCgpJREVNUE9URU5UEAIqCQjoBxCAgICAAiKeAgoT",
+            "VW5pbnRlcnByZXRlZE9wdGlvbhI7CgRuYW1lGAIgAygLMi0uZ29vZ2xlLnBy",
+            "b3RvYnVmLlVuaW50ZXJwcmV0ZWRPcHRpb24uTmFtZVBhcnQSGAoQaWRlbnRp",
+            "Zmllcl92YWx1ZRgDIAEoCRIaChJwb3NpdGl2ZV9pbnRfdmFsdWUYBCABKAQS",
+            "GgoSbmVnYXRpdmVfaW50X3ZhbHVlGAUgASgDEhQKDGRvdWJsZV92YWx1ZRgG",
+            "IAEoARIUCgxzdHJpbmdfdmFsdWUYByABKAwSFwoPYWdncmVnYXRlX3ZhbHVl",
+            "GAggASgJGjMKCE5hbWVQYXJ0EhEKCW5hbWVfcGFydBgBIAIoCRIUCgxpc19l",
+            "eHRlbnNpb24YAiACKAgi1QEKDlNvdXJjZUNvZGVJbmZvEjoKCGxvY2F0aW9u",
+            "GAEgAygLMiguZ29vZ2xlLnByb3RvYnVmLlNvdXJjZUNvZGVJbmZvLkxvY2F0",
+            "aW9uGoYBCghMb2NhdGlvbhIQCgRwYXRoGAEgAygFQgIQARIQCgRzcGFuGAIg",
+            "AygFQgIQARIYChBsZWFkaW5nX2NvbW1lbnRzGAMgASgJEhkKEXRyYWlsaW5n",
+            "X2NvbW1lbnRzGAQgASgJEiEKGWxlYWRpbmdfZGV0YWNoZWRfY29tbWVudHMY",
+            "BiADKAkipwEKEUdlbmVyYXRlZENvZGVJbmZvEkEKCmFubm90YXRpb24YASAD",
+            "KAsyLS5nb29nbGUucHJvdG9idWYuR2VuZXJhdGVkQ29kZUluZm8uQW5ub3Rh",
+            "dGlvbhpPCgpBbm5vdGF0aW9uEhAKBHBhdGgYASADKAVCAhABEhMKC3NvdXJj",
+            "ZV9maWxlGAIgASgJEg0KBWJlZ2luGAMgASgFEgsKA2VuZBgEIAEoBUJ+ChNj",
+            "b20uZ29vZ2xlLnByb3RvYnVmQhBEZXNjcmlwdG9yUHJvdG9zSAFaLWdvb2ds",
+            "ZS5nb2xhbmcub3JnL3Byb3RvYnVmL3R5cGVzL2Rlc2NyaXB0b3JwYvgBAaIC",
+            "A0dQQqoCGkdvb2dsZS5Qcm90b2J1Zi5SZWZsZWN0aW9u"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -172,9 +174,9 @@ namespace Google.Protobuf.Reflection {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.EnumValueDescriptorProto), global::Google.Protobuf.Reflection.EnumValueDescriptorProto.Parser, new[]{ "Name", "Number", "Options" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.ServiceDescriptorProto), global::Google.Protobuf.Reflection.ServiceDescriptorProto.Parser, new[]{ "Name", "Method", "Options" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.MethodDescriptorProto), global::Google.Protobuf.Reflection.MethodDescriptorProto.Parser, new[]{ "Name", "InputType", "OutputType", "Options", "ClientStreaming", "ServerStreaming" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.FileOptions), global::Google.Protobuf.Reflection.FileOptions.Parser, new[]{ "JavaPackage", "JavaOuterClassname", "JavaMultipleFiles", "JavaGenerateEqualsAndHash", "JavaStringCheckUtf8", "OptimizeFor", "GoPackage", "CcGenericServices", "JavaGenericServices", "PyGenericServices", "PhpGenericServices", "Deprecated", "CcEnableArenas", "ObjcClassPrefix", "CsharpNamespace", "SwiftPrefix", "PhpClassPrefix", "PhpNamespace", "PhpMetadataNamespace", "RubyPackage", "UninterpretedOption" }, null, new[]{ typeof(global::Google.Protobuf.Reflection.FileOptions.Types.OptimizeMode) }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.FileOptions), global::Google.Protobuf.Reflection.FileOptions.Parser, new[]{ "JavaPackage", "JavaOuterClassname", "JavaMultipleFiles", "JavaGenerateEqualsAndHash", "JavaStringCheckUtf8", "OptimizeFor", "GoPackage", "CcGenericServices", "JavaGenericServices", "PyGenericServices", "PhpGenericServices", "Deprecated", "CcEnableArenas", "ObjcClassPrefix", "CsharpNamespace", "SwiftPrefix", "PhpClassPrefix", "PhpNamespace", "PhpMetadataNamespace", "RubyPackage", "OptimizedContainerDefault", "UninterpretedOption" }, null, new[]{ typeof(global::Google.Protobuf.Reflection.FileOptions.Types.OptimizeMode) }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.MessageOptions), global::Google.Protobuf.Reflection.MessageOptions.Parser, new[]{ "MessageSetWireFormat", "NoStandardDescriptorAccessor", "Deprecated", "MapEntry", "UninterpretedOption" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.FieldOptions), global::Google.Protobuf.Reflection.FieldOptions.Parser, new[]{ "Ctype", "Packed", "Jstype", "Lazy", "Deprecated", "Weak", "UninterpretedOption" }, null, new[]{ typeof(global::Google.Protobuf.Reflection.FieldOptions.Types.CType), typeof(global::Google.Protobuf.Reflection.FieldOptions.Types.JSType) }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.FieldOptions), global::Google.Protobuf.Reflection.FieldOptions.Parser, new[]{ "Ctype", "Packed", "Jstype", "Lazy", "Deprecated", "OptimizedContainer", "Weak", "UninterpretedOption" }, null, new[]{ typeof(global::Google.Protobuf.Reflection.FieldOptions.Types.CType), typeof(global::Google.Protobuf.Reflection.FieldOptions.Types.JSType) }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.OneofOptions), global::Google.Protobuf.Reflection.OneofOptions.Parser, new[]{ "UninterpretedOption" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.EnumOptions), global::Google.Protobuf.Reflection.EnumOptions.Parser, new[]{ "AllowAlias", "Deprecated", "UninterpretedOption" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.EnumValueOptions), global::Google.Protobuf.Reflection.EnumValueOptions.Parser, new[]{ "Deprecated", "UninterpretedOption" }, null, null, null, null),
@@ -4750,6 +4752,7 @@ namespace Google.Protobuf.Reflection {
       phpNamespace_ = other.phpNamespace_;
       phpMetadataNamespace_ = other.phpMetadataNamespace_;
       rubyPackage_ = other.rubyPackage_;
+      optimizedContainerDefault_ = other.optimizedContainerDefault_;
       uninterpretedOption_ = other.uninterpretedOption_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
       _extensions = pb::ExtensionSet.Clone(other._extensions);
@@ -5326,6 +5329,34 @@ namespace Google.Protobuf.Reflection {
       rubyPackage_ = null;
     }
 
+    /// <summary>Field number for the "optimized_container_default" field.</summary>
+    public const int OptimizedContainerDefaultFieldNumber = 46;
+    private readonly static bool OptimizedContainerDefaultDefaultValue = false;
+
+    private bool optimizedContainerDefault_;
+    /// <summary>
+    /// Default value for optimized_container field option. If optimize_container
+    /// field option is not explicitly specified, this default is used.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool OptimizedContainerDefault {
+      get { if ((_hasBits0 & 1024) != 0) { return optimizedContainerDefault_; } else { return OptimizedContainerDefaultDefaultValue; } }
+      set {
+        _hasBits0 |= 1024;
+        optimizedContainerDefault_ = value;
+      }
+    }
+    /// <summary>Gets whether the "optimized_container_default" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool HasOptimizedContainerDefault {
+      get { return (_hasBits0 & 1024) != 0; }
+    }
+    /// <summary>Clears the value of the "optimized_container_default" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void ClearOptimizedContainerDefault() {
+      _hasBits0 &= ~1024;
+    }
+
     /// <summary>Field number for the "uninterpreted_option" field.</summary>
     public const int UninterpretedOptionFieldNumber = 999;
     private static readonly pb::FieldCodec<global::Google.Protobuf.Reflection.UninterpretedOption> _repeated_uninterpretedOption_codec
@@ -5373,6 +5404,7 @@ namespace Google.Protobuf.Reflection {
       if (PhpNamespace != other.PhpNamespace) return false;
       if (PhpMetadataNamespace != other.PhpMetadataNamespace) return false;
       if (RubyPackage != other.RubyPackage) return false;
+      if (OptimizedContainerDefault != other.OptimizedContainerDefault) return false;
       if(!uninterpretedOption_.Equals(other.uninterpretedOption_)) return false;
       if (!Equals(_extensions, other._extensions)) {
         return false;
@@ -5403,6 +5435,7 @@ namespace Google.Protobuf.Reflection {
       if (HasPhpNamespace) hash ^= PhpNamespace.GetHashCode();
       if (HasPhpMetadataNamespace) hash ^= PhpMetadataNamespace.GetHashCode();
       if (HasRubyPackage) hash ^= RubyPackage.GetHashCode();
+      if (HasOptimizedContainerDefault) hash ^= OptimizedContainerDefault.GetHashCode();
       hash ^= uninterpretedOption_.GetHashCode();
       if (_extensions != null) {
         hash ^= _extensions.GetHashCode();
@@ -5503,6 +5536,10 @@ namespace Google.Protobuf.Reflection {
         output.WriteRawTag(234, 2);
         output.WriteString(RubyPackage);
       }
+      if (HasOptimizedContainerDefault) {
+        output.WriteRawTag(240, 2);
+        output.WriteBool(OptimizedContainerDefault);
+      }
       uninterpretedOption_.WriteTo(output, _repeated_uninterpretedOption_codec);
       if (_extensions != null) {
         _extensions.WriteTo(output);
@@ -5596,6 +5633,10 @@ namespace Google.Protobuf.Reflection {
         output.WriteRawTag(234, 2);
         output.WriteString(RubyPackage);
       }
+      if (HasOptimizedContainerDefault) {
+        output.WriteRawTag(240, 2);
+        output.WriteBool(OptimizedContainerDefault);
+      }
       uninterpretedOption_.WriteTo(ref output, _repeated_uninterpretedOption_codec);
       if (_extensions != null) {
         _extensions.WriteTo(ref output);
@@ -5668,6 +5709,9 @@ namespace Google.Protobuf.Reflection {
       }
       if (HasRubyPackage) {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(RubyPackage);
+      }
+      if (HasOptimizedContainerDefault) {
+        size += 2 + 1;
       }
       size += uninterpretedOption_.CalculateSize(_repeated_uninterpretedOption_codec);
       if (_extensions != null) {
@@ -5743,6 +5787,9 @@ namespace Google.Protobuf.Reflection {
       }
       if (other.HasRubyPackage) {
         RubyPackage = other.RubyPackage;
+      }
+      if (other.HasOptimizedContainerDefault) {
+        OptimizedContainerDefault = other.OptimizedContainerDefault;
       }
       uninterpretedOption_.Add(other.uninterpretedOption_);
       pb::ExtensionSet.MergeFrom(ref _extensions, other._extensions);
@@ -5840,6 +5887,10 @@ namespace Google.Protobuf.Reflection {
           }
           case 362: {
             RubyPackage = input.ReadString();
+            break;
+          }
+          case 368: {
+            OptimizedContainerDefault = input.ReadBool();
             break;
           }
           case 7994: {
@@ -5940,6 +5991,10 @@ namespace Google.Protobuf.Reflection {
           }
           case 362: {
             RubyPackage = input.ReadString();
+            break;
+          }
+          case 368: {
+            OptimizedContainerDefault = input.ReadBool();
             break;
           }
           case 7994: {
@@ -6499,6 +6554,7 @@ namespace Google.Protobuf.Reflection {
       jstype_ = other.jstype_;
       lazy_ = other.lazy_;
       deprecated_ = other.deprecated_;
+      optimizedContainer_ = other.optimizedContainer_;
       weak_ = other.weak_;
       uninterpretedOption_ = other.uninterpretedOption_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -6691,6 +6747,30 @@ namespace Google.Protobuf.Reflection {
       _hasBits0 &= ~4;
     }
 
+    /// <summary>Field number for the "optimized_container" field.</summary>
+    public const int OptimizedContainerFieldNumber = 7;
+    private readonly static bool OptimizedContainerDefaultValue = false;
+
+    private bool optimizedContainer_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool OptimizedContainer {
+      get { if ((_hasBits0 & 32) != 0) { return optimizedContainer_; } else { return OptimizedContainerDefaultValue; } }
+      set {
+        _hasBits0 |= 32;
+        optimizedContainer_ = value;
+      }
+    }
+    /// <summary>Gets whether the "optimized_container" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool HasOptimizedContainer {
+      get { return (_hasBits0 & 32) != 0; }
+    }
+    /// <summary>Clears the value of the "optimized_container" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void ClearOptimizedContainer() {
+      _hasBits0 &= ~32;
+    }
+
     /// <summary>Field number for the "weak" field.</summary>
     public const int WeakFieldNumber = 10;
     private readonly static bool WeakDefaultValue = false;
@@ -6701,21 +6781,21 @@ namespace Google.Protobuf.Reflection {
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Weak {
-      get { if ((_hasBits0 & 32) != 0) { return weak_; } else { return WeakDefaultValue; } }
+      get { if ((_hasBits0 & 64) != 0) { return weak_; } else { return WeakDefaultValue; } }
       set {
-        _hasBits0 |= 32;
+        _hasBits0 |= 64;
         weak_ = value;
       }
     }
     /// <summary>Gets whether the "weak" field is set</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool HasWeak {
-      get { return (_hasBits0 & 32) != 0; }
+      get { return (_hasBits0 & 64) != 0; }
     }
     /// <summary>Clears the value of the "weak" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void ClearWeak() {
-      _hasBits0 &= ~32;
+      _hasBits0 &= ~64;
     }
 
     /// <summary>Field number for the "uninterpreted_option" field.</summary>
@@ -6749,6 +6829,7 @@ namespace Google.Protobuf.Reflection {
       if (Jstype != other.Jstype) return false;
       if (Lazy != other.Lazy) return false;
       if (Deprecated != other.Deprecated) return false;
+      if (OptimizedContainer != other.OptimizedContainer) return false;
       if (Weak != other.Weak) return false;
       if(!uninterpretedOption_.Equals(other.uninterpretedOption_)) return false;
       if (!Equals(_extensions, other._extensions)) {
@@ -6765,6 +6846,7 @@ namespace Google.Protobuf.Reflection {
       if (HasJstype) hash ^= Jstype.GetHashCode();
       if (HasLazy) hash ^= Lazy.GetHashCode();
       if (HasDeprecated) hash ^= Deprecated.GetHashCode();
+      if (HasOptimizedContainer) hash ^= OptimizedContainer.GetHashCode();
       if (HasWeak) hash ^= Weak.GetHashCode();
       hash ^= uninterpretedOption_.GetHashCode();
       if (_extensions != null) {
@@ -6806,6 +6888,10 @@ namespace Google.Protobuf.Reflection {
         output.WriteRawTag(48);
         output.WriteEnum((int) Jstype);
       }
+      if (HasOptimizedContainer) {
+        output.WriteRawTag(56);
+        output.WriteBool(OptimizedContainer);
+      }
       if (HasWeak) {
         output.WriteRawTag(80);
         output.WriteBool(Weak);
@@ -6843,6 +6929,10 @@ namespace Google.Protobuf.Reflection {
         output.WriteRawTag(48);
         output.WriteEnum((int) Jstype);
       }
+      if (HasOptimizedContainer) {
+        output.WriteRawTag(56);
+        output.WriteBool(OptimizedContainer);
+      }
       if (HasWeak) {
         output.WriteRawTag(80);
         output.WriteBool(Weak);
@@ -6873,6 +6963,9 @@ namespace Google.Protobuf.Reflection {
         size += 1 + 1;
       }
       if (HasDeprecated) {
+        size += 1 + 1;
+      }
+      if (HasOptimizedContainer) {
         size += 1 + 1;
       }
       if (HasWeak) {
@@ -6907,6 +7000,9 @@ namespace Google.Protobuf.Reflection {
       }
       if (other.HasDeprecated) {
         Deprecated = other.Deprecated;
+      }
+      if (other.HasOptimizedContainer) {
+        OptimizedContainer = other.OptimizedContainer;
       }
       if (other.HasWeak) {
         Weak = other.Weak;
@@ -6947,6 +7043,10 @@ namespace Google.Protobuf.Reflection {
           }
           case 48: {
             Jstype = (global::Google.Protobuf.Reflection.FieldOptions.Types.JSType) input.ReadEnum();
+            break;
+          }
+          case 56: {
+            OptimizedContainer = input.ReadBool();
             break;
           }
           case 80: {
@@ -6991,6 +7091,10 @@ namespace Google.Protobuf.Reflection {
           }
           case 48: {
             Jstype = (global::Google.Protobuf.Reflection.FieldOptions.Types.JSType) input.ReadEnum();
+            break;
+          }
+          case 56: {
+            OptimizedContainer = input.ReadBool();
             break;
           }
           case 80: {

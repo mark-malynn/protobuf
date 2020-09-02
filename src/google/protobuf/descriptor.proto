@@ -452,6 +452,9 @@ message FileOptions {
   // determining the ruby package.
   optional string ruby_package = 45;
 
+  // Default value for optimized_container field option. If optimize_container
+  // field option is not explicitly specified, this default is used.
+  optional bool optimized_container_default = 46 [default = false];
 
   // The parser stores options it doesn't recognize here.
   // See the documentation for the "Options" section above.
@@ -609,6 +612,8 @@ message FieldOptions {
   // for accessors, or it will be completely ignored; in the very least, this
   // is a formalization for deprecating fields.
   optional bool deprecated = 3 [default = false];
+
+  optional bool optimized_container = 7 [default = false];
 
   // For Google-internal migration only. Do not use.
   optional bool weak = 10 [default = false];

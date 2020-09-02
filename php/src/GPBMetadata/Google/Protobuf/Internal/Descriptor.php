@@ -162,6 +162,7 @@ class Descriptor
             ->optional('php_namespace', \Google\Protobuf\Internal\GPBType::STRING, 41)
             ->optional('php_metadata_namespace', \Google\Protobuf\Internal\GPBType::STRING, 44)
             ->optional('ruby_package', \Google\Protobuf\Internal\GPBType::STRING, 45)
+            ->optional('optimized_container_default', \Google\Protobuf\Internal\GPBType::BOOL, 46)
             ->repeated('uninterpreted_option', \Google\Protobuf\Internal\GPBType::MESSAGE, 999, 'google.protobuf.internal.UninterpretedOption')
             ->finalizeToPool();
 
@@ -185,6 +186,7 @@ class Descriptor
             ->optional('jstype', \Google\Protobuf\Internal\GPBType::ENUM, 6, 'google.protobuf.internal.FieldOptions.JSType')
             ->optional('lazy', \Google\Protobuf\Internal\GPBType::BOOL, 5)
             ->optional('deprecated', \Google\Protobuf\Internal\GPBType::BOOL, 3)
+            ->optional('optimized_container', \Google\Protobuf\Internal\GPBType::BOOL, 7)
             ->optional('weak', \Google\Protobuf\Internal\GPBType::BOOL, 10)
             ->repeated('uninterpreted_option', \Google\Protobuf\Internal\GPBType::MESSAGE, 999, 'google.protobuf.internal.UninterpretedOption')
             ->finalizeToPool();

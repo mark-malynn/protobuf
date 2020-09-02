@@ -84,6 +84,7 @@ src/**/*.trs
 # JavaBuild output.
 java/core/target
 java/util/target
+java/lite/target
 javanano/target
 java/.idea
 java/**/*.iml
