@@ -651,6 +651,7 @@ public abstract class CodedInputStream {
           skipRawBytes(FIXED64_SIZE);
           return true;
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
+        case WireFormat.WIRETYPE_CONTAINER:
           skipRawBytes(readRawVarint32());
           return true;
         case WireFormat.WIRETYPE_START_GROUP:
@@ -686,6 +687,7 @@ public abstract class CodedInputStream {
             return true;
           }
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
+        case WireFormat.WIRETYPE_CONTAINER:
           {
             ByteString value = readBytes();
             output.writeRawVarint32(tag);
@@ -1365,6 +1367,7 @@ public abstract class CodedInputStream {
           skipRawBytes(FIXED64_SIZE);
           return true;
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
+        case WireFormat.WIRETYPE_CONTAINER:
           skipRawBytes(readRawVarint32());
           return true;
         case WireFormat.WIRETYPE_START_GROUP:
@@ -1400,6 +1403,7 @@ public abstract class CodedInputStream {
             return true;
           }
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
+        case WireFormat.WIRETYPE_CONTAINER:
           {
             ByteString value = readBytes();
             output.writeRawVarint32(tag);
@@ -2092,6 +2096,7 @@ public abstract class CodedInputStream {
           skipRawBytes(FIXED64_SIZE);
           return true;
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
+        case WireFormat.WIRETYPE_CONTAINER:
           skipRawBytes(readRawVarint32());
           return true;
         case WireFormat.WIRETYPE_START_GROUP:
@@ -2127,6 +2132,7 @@ public abstract class CodedInputStream {
             return true;
           }
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
+        case WireFormat.WIRETYPE_CONTAINER:
           {
             ByteString value = readBytes();
             output.writeRawVarint32(tag);
@@ -3214,6 +3220,7 @@ public abstract class CodedInputStream {
           skipRawBytes(FIXED64_SIZE);
           return true;
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
+        case WireFormat.WIRETYPE_CONTAINER:
           skipRawBytes(readRawVarint32());
           return true;
         case WireFormat.WIRETYPE_START_GROUP:
@@ -3249,6 +3256,7 @@ public abstract class CodedInputStream {
             return true;
           }
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
+        case WireFormat.WIRETYPE_CONTAINER:
           {
             ByteString value = readBytes();
             output.writeRawVarint32(tag);

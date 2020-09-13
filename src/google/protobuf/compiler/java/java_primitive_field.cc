@@ -77,6 +77,7 @@ void SetPrimitiveVariables(const FieldDescriptor* descriptor,
         "com.google.protobuf.Internal." + capitalized_type + "List";
     (*variables)["empty_list"] = "empty" + capitalized_type + "List()";
     (*variables)["create_list"] = "new" + capitalized_type + "List()";
+    (*variables)["create_list_size"] = "new" + capitalized_type + "List(size)";
     (*variables)["mutable_copy_list"] =
         "mutableCopy(" + (*variables)["name"] + "_)";
     (*variables)["name_make_immutable"] =
@@ -92,6 +93,7 @@ void SetPrimitiveVariables(const FieldDescriptor* descriptor,
         "java.util.List<" + (*variables)["boxed_type"] + ">";
     (*variables)["create_list"] =
         "new java.util.ArrayList<" + (*variables)["boxed_type"] + ">()";
+    (*variables)["create_list_size"] = "new java.util.ArrayList<>(size)";
     (*variables)["mutable_copy_list"] = "new java.util.ArrayList<" +
                                         (*variables)["boxed_type"] + ">(" +
                                         (*variables)["name"] + "_)";
@@ -691,7 +693,7 @@ void RepeatedImmutablePrimitiveFieldGenerator::GenerateMembers(
       "}\n");
   printer->Annotate("{", "}", descriptor_);
 
-  if (descriptor_->is_packed()) {
+  if (descriptor_->is_packed() || descriptor_->is_optimized_container()) {
     printer->Print(variables_,
                    "private int $name$MemoizedSerializedSize = -1;\n");
   }
@@ -870,6 +872,23 @@ void RepeatedImmutablePrimitiveFieldGenerator::GenerateParsingCodeFromPacked(
       "input.popLimit(limit);\n");
 }
 
+void RepeatedImmutablePrimitiveFieldGenerator::GenerateParsingCodeFromOptimizedContainer(
+    io::Printer* printer) const {
+  printer->Print(
+      variables_,
+      "int length = input.readRawVarint32();\n"
+      "int limit = input.pushLimit(length);\n"
+      "int size = input.readRawVarint32();\n"
+      "if (!$get_mutable_bit_parser$ && input.getBytesUntilLimit() > 0) {\n"
+      "  $name$_ = $create_list_size$;\n"
+      "  $set_mutable_bit_parser$;\n"
+      "}\n"
+      "while (input.getBytesUntilLimit() > 0) {\n"
+      "  $repeated_add$(input.read$capitalized_type$());\n"
+      "}\n"
+      "input.popLimit(limit);\n");
+}
+
 void RepeatedImmutablePrimitiveFieldGenerator::GenerateParsingDoneCode(
     io::Printer* printer) const {
   printer->Print(variables_,
@@ -880,17 +899,22 @@ void RepeatedImmutablePrimitiveFieldGenerator::GenerateParsingDoneCode(
 
 void RepeatedImmutablePrimitiveFieldGenerator::GenerateSerializationCode(
     io::Printer* printer) const {
-  if (descriptor_->is_packed()) {
+  if (descriptor_->is_packed() || descriptor_->is_optimized_container()) {
     // We invoke getSerializedSize in writeTo for messages that have packed
     // fields in ImmutableMessageGenerator::GenerateMessageSerializationMethods.
     // That makes it safe to rely on the memoized size here.
     printer->Print(variables_,
-                   "if (get$capitalized_name$List().size() > 0) {\n"
+                   "if ($name$_.size() > 0) {\n"
                    "  output.writeUInt32NoTag($tag$);\n"
-                   "  output.writeUInt32NoTag($name$MemoizedSerializedSize);\n"
-                   "}\n"
-                   "for (int i = 0; i < $name$_.size(); i++) {\n"
-                   "  output.write$capitalized_type$NoTag($repeated_get$(i));\n"
+                   "  output.writeUInt32NoTag($name$MemoizedSerializedSize);\n");
+    if (descriptor_->is_optimized_container()) {
+      printer->Print(variables_,
+                     "  output.writeUInt32NoTag($name$_.size());\n");
+    }
+    printer->Print(variables_,
+                   "  for (int i = 0; i < $name$_.size(); i++) {\n"
+                   "    output.write$capitalized_type$NoTag($repeated_get$(i));\n"
+                   "  }\n"
                    "}\n");
   } else {
     printer->Print(
@@ -903,10 +927,26 @@ void RepeatedImmutablePrimitiveFieldGenerator::GenerateSerializationCode(
 
 void RepeatedImmutablePrimitiveFieldGenerator::GenerateSerializedSizeCode(
     io::Printer* printer) const {
-  printer->Print(variables_,
-                 "{\n"
-                 "  int dataSize = 0;\n");
+
+  if (descriptor_->is_packed() || descriptor_->is_optimized_container()) {
+    printer->Print(variables_,
+                   "if ($name$_.isEmpty()) {\n"
+                   "  $name$MemoizedSerializedSize = 0;\n"
+                   "} else {\n");
+  } else {
+    printer->Print(variables_,
+                   "if (!$name$_.isEmpty()) {\n");
+  }
   printer->Indent();
+
+  if (descriptor_->is_optimized_container()) {
+    printer->Print(variables_,
+                   "int dataSize = com.google.protobuf.CodedOutputStream\n"
+                   "    .computeUInt32SizeNoTag($name$_).size());\n");
+  } else {
+    printer->Print(variables_,
+                   "int dataSize = 0;\n");
+  }
 
   if (FixedSize(GetType(descriptor_)) == -1) {
     printer->Print(
@@ -918,27 +958,21 @@ void RepeatedImmutablePrimitiveFieldGenerator::GenerateSerializedSizeCode(
   } else {
     printer->Print(
         variables_,
-        "dataSize = $fixed_size$ * get$capitalized_name$List().size();\n");
+        "dataSize = $fixed_size$ * $name$_.size();\n");
   }
 
   printer->Print("size += dataSize;\n");
 
-  if (descriptor_->is_packed()) {
+  if (descriptor_->is_packed() || descriptor_->is_optimized_container()) {
     printer->Print(variables_,
-                   "if (!get$capitalized_name$List().isEmpty()) {\n"
-                   "  size += $tag_size$;\n"
-                   "  size += com.google.protobuf.CodedOutputStream\n"
-                   "      .computeInt32SizeNoTag(dataSize);\n"
-                   "}\n");
+                   "size += $tag_size$;\n"
+                   "size += com.google.protobuf.CodedOutputStream\n"
+                   "    .computeInt32SizeNoTag(dataSize);\n"
+                   "$name$MemoizedSerializedSize = dataSize;\n");
   } else {
     printer->Print(
         variables_,
-        "size += $tag_size$ * get$capitalized_name$List().size();\n");
-  }
-
-  // cache the data size for packed fields.
-  if (descriptor_->is_packed()) {
-    printer->Print(variables_, "$name$MemoizedSerializedSize = dataSize;\n");
+        "size += $tag_size$ * $name$_.size();\n");
   }
 
   printer->Outdent();

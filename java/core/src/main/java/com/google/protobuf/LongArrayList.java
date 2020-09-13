@@ -68,6 +68,10 @@ final class LongArrayList extends AbstractProtobufList<Long>
     this(new long[DEFAULT_CAPACITY], 0);
   }
 
+  LongArrayList(int capacity) {
+    this(new long[capacity], 0);
+  }
+ 
   /**
    * Constructs a new mutable {@code LongArrayList} containing the same elements as {@code other}.
    */

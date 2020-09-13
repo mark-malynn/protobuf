@@ -68,6 +68,10 @@ final class FloatArrayList extends AbstractProtobufList<Float>
     this(new float[DEFAULT_CAPACITY], 0);
   }
 
+  FloatArrayList(int capacity) {
+    this(new float[capacity], 0);
+  }
+
   /**
    * Constructs a new mutable {@code FloatArrayList} containing the same elements as {@code other}.
    */

@@ -56,6 +56,7 @@ class ImmutableMapFieldGenerator : public ImmutableFieldGenerator {
   void GenerateMergingCode(io::Printer* printer) const;
   void GenerateBuildingCode(io::Printer* printer) const;
   void GenerateParsingCode(io::Printer* printer) const;
+  void GenerateParsingCodeFromOptimizedContainer(io::Printer* printer) const;
   void GenerateParsingDoneCode(io::Printer* printer) const;
   void GenerateSerializationCode(io::Printer* printer) const;
   void GenerateSerializedSizeCode(io::Printer* printer) const;
@@ -70,6 +71,7 @@ class ImmutableMapFieldGenerator : public ImmutableFieldGenerator {
   std::map<std::string, std::string> variables_;
   ClassNameResolver* name_resolver_;
   void GenerateMapGetters(io::Printer* printer) const;
+  void GenerateParsingCodeForMapEntry(io::Printer* printer) const;
 };
 
 }  // namespace java

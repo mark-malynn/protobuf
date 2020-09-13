@@ -68,6 +68,10 @@ final class DoubleArrayList extends AbstractProtobufList<Double>
     this(new double[DEFAULT_CAPACITY], 0);
   }
 
+  DoubleArrayList(int capacity) {
+    this(new double[capacity], 0);
+  }
+
   /**
    * Constructs a new mutable {@code DoubleArrayList} containing the same elements as {@code other}.
    */

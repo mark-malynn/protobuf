@@ -699,7 +699,7 @@ void RepeatedImmutableEnumFieldGenerator::GenerateMembers(
     printer->Annotate("{", "}", descriptor_);
   }
 
-  if (descriptor_->is_packed()) {
+  if (descriptor_->is_packed() || descriptor_->is_optimized_container()) {
     printer->Print(variables_, "private int $name$MemoizedSerializedSize;\n");
   }
 }
@@ -961,6 +961,44 @@ void RepeatedImmutableEnumFieldGenerator::GenerateParsingCodeFromPacked(
                  "input.popLimit(oldLimit);\n");
 }
 
+void RepeatedImmutableEnumFieldGenerator::GenerateParsingCodeFromOptimizedContainer(
+    io::Printer* printer) const {
+
+  printer->Print(
+      variables_,
+      "int length = input.readRawVarint32();\n"
+      "int limit = input.pushLimit(length);\n"
+      "int size = input.readRawVarint32();\n"
+      "if (!$get_mutable_bit_parser$ && input.getBytesUntilLimit() > 0) {\n"
+      "  $name$_ = new java.util.ArrayList<java.lang.Integer>(size);\n"
+      "  $set_mutable_bit_parser$;\n"
+      "}\n"
+      "while (input.getBytesUntilLimit() > 0) {\n");
+
+  printer->Indent();
+  if (SupportUnknownEnumValue(descriptor_->file())) {
+    printer->Print(
+        variables_,
+        "$name$_.add(input.readEnum());\n");
+  } else {
+    printer->Print(
+        variables_,
+        "int rawValue = input.readEnum();\n"
+        "@SuppressWarnings(\"deprecation\")\n"
+        "$type$ value = $type$.$for_number$(rawValue);\n"
+        "if (value == null) {\n"
+        "  unknownFields.mergeVarintField($number$, rawValue);\n"
+        "} else {\n"
+        "  $name$_.add(rawValue);\n"
+        "}\n");
+  }
+  printer->Outdent();
+  printer->Print(
+      variables_,
+      "}\n"
+      "input.popLimit(limit);\n");
+}
+
 void RepeatedImmutableEnumFieldGenerator::GenerateParsingDoneCode(
     io::Printer* printer) const {
   printer->Print(
@@ -972,14 +1010,19 @@ void RepeatedImmutableEnumFieldGenerator::GenerateParsingDoneCode(
 
 void RepeatedImmutableEnumFieldGenerator::GenerateSerializationCode(
     io::Printer* printer) const {
-  if (descriptor_->is_packed()) {
+  if (descriptor_->is_packed() || descriptor_->is_optimized_container()) {
     printer->Print(variables_,
-                   "if (get$capitalized_name$List().size() > 0) {\n"
+                   "if ($name$_.size() > 0) {\n"
                    "  output.writeUInt32NoTag($tag$);\n"
-                   "  output.writeUInt32NoTag($name$MemoizedSerializedSize);\n"
-                   "}\n"
-                   "for (int i = 0; i < $name$_.size(); i++) {\n"
-                   "  output.writeEnumNoTag($name$_.get(i));\n"
+                   "  output.writeUInt32NoTag($name$MemoizedSerializedSize);\n");
+    if (descriptor_->is_optimized_container()) {
+      printer->Print(variables_,
+                     "  output.writeUInt32NoTag($name$_.size());\n");
+    }
+    printer->Print(variables_,
+                   "  for (int i = 0; i < $name$_.size(); i++) {\n"
+                   "    output.writeEnumNoTag($name$_.get(i));\n"
+                   "  }\n"
                    "}\n");
   } else {
     printer->Print(variables_,
@@ -991,31 +1034,42 @@ void RepeatedImmutableEnumFieldGenerator::GenerateSerializationCode(
 
 void RepeatedImmutableEnumFieldGenerator::GenerateSerializedSizeCode(
     io::Printer* printer) const {
-  printer->Print(variables_,
-                 "{\n"
-                 "  int dataSize = 0;\n");
+  if (descriptor_->is_packed() || descriptor_->is_optimized_container()) {
+    printer->Print(variables_,
+                   "if ($name$_.isEmpty()) {\n"
+                   "  $name$MemoizedSerializedSize = 0;\n"
+                   "} else {\n");
+  } else {
+    printer->Print(variables_,
+                   "if (!$name$_.isEmpty()) {\n");
+  }
   printer->Indent();
+
+  if (descriptor_->is_optimized_container()) {
+    printer->Print(variables_,
+                   "int dataSize = com.google.protobuf.CodedOutputStream\n"
+                   "    .computeUInt32SizeNoTag($name$_).size());\n");
+  } else {
+    printer->Print(variables_,
+                   "int dataSize = 0;\n");
+  }
 
   printer->Print(variables_,
                  "for (int i = 0; i < $name$_.size(); i++) {\n"
                  "  dataSize += com.google.protobuf.CodedOutputStream\n"
                  "    .computeEnumSizeNoTag($name$_.get(i));\n"
                  "}\n");
+
   printer->Print("size += dataSize;\n");
-  if (descriptor_->is_packed()) {
+
+  if (descriptor_->is_packed() || descriptor_->is_optimized_container()) {
     printer->Print(variables_,
-                   "if (!get$capitalized_name$List().isEmpty()) {"
-                   "  size += $tag_size$;\n"
-                   "  size += com.google.protobuf.CodedOutputStream\n"
-                   "    .computeUInt32SizeNoTag(dataSize);\n"
-                   "}");
+                   "size += $tag_size$;\n"
+                   "size += com.google.protobuf.CodedOutputStream\n"
+                   "    .computeInt32SizeNoTag(dataSize);\n"
+                   "$name$MemoizedSerializedSize = dataSize;\n");
   } else {
     printer->Print(variables_, "size += $tag_size$ * $name$_.size();\n");
-  }
-
-  // cache the data size for packed fields.
-  if (descriptor_->is_packed()) {
-    printer->Print(variables_, "$name$MemoizedSerializedSize = dataSize;\n");
   }
 
   printer->Outdent();

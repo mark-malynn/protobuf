@@ -324,7 +324,10 @@ class PROTOBUF_EXPORT UnknownFieldSetFieldSkipper : public FieldSkipper {
 
 inline WireFormatLite::WireType WireFormat::WireTypeForField(
     const FieldDescriptor* field) {
-  if (field->is_packed()) {
+  // optimized container takes precedence over packed.
+  if (field->is_optimized_container()) {
+    return WireFormatLite::WIRETYPE_CONTAINER;
+  } else if (field->is_packed()) {
     return WireFormatLite::WIRETYPE_LENGTH_DELIMITED;
   } else {
     return WireTypeForFieldType(field->type());

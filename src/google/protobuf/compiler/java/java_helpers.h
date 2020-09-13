@@ -342,9 +342,10 @@ struct ExtensionRangeOrdering {
 const FieldDescriptor** SortFieldsByNumber(const Descriptor* descriptor);
 
 // Does this message class have any packed fields?
-inline bool HasPackedFields(const Descriptor* descriptor) {
+inline bool HasPackedOrOptimizedContainerFields(const Descriptor* descriptor) {
   for (int i = 0; i < descriptor->field_count(); i++) {
-    if (descriptor->field(i)->is_packed()) {
+    const FieldDescriptor* f = descriptor->field(i);
+    if (f->is_packed() || f->is_optimized_container()) {
       return true;
     }
   }

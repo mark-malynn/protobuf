@@ -35,6 +35,7 @@
 #include <google/protobuf/compiler/java/java_helpers.h>
 #include <google/protobuf/compiler/java/java_name_resolver.h>
 #include <google/protobuf/io/printer.h>
+#include <google/protobuf/wire_format.h>
 
 namespace google {
 namespace protobuf {
@@ -81,6 +82,8 @@ void SetMessageVariables(const FieldDescriptor* descriptor, int messageBitIndex,
   SetCommonFieldVariables(descriptor, info, variables);
   ClassNameResolver* name_resolver = context->GetNameResolver();
 
+  (*variables)["tag_size"] = StrCat(
+      internal::WireFormat::TagSize(descriptor->number(), GetType(descriptor)));
   (*variables)["type"] =
       name_resolver->GetImmutableClassName(descriptor->message_type());
   const FieldDescriptor* key = KeyField(descriptor);
@@ -315,6 +318,10 @@ void ImmutableMapFieldGenerator::GenerateMembers(io::Printer* printer) const {
         "}\n");
   }
   GenerateMapGetters(printer);
+  if (descriptor_->is_optimized_container()) {
+    printer->Print(variables_,
+                   "private int $name$MemoizedSerializedSize = -1;\n");
+  }
 }
 
 void ImmutableMapFieldGenerator::GenerateBuilderMembers(
@@ -689,6 +696,11 @@ void ImmutableMapFieldGenerator::GenerateParsingCode(
                  "      $map_field_parameter$);\n"
                  "  $set_mutable_bit_parser$;\n"
                  "}\n");
+  GenerateParsingCodeForMapEntry(printer);
+}
+
+void ImmutableMapFieldGenerator::GenerateParsingCodeForMapEntry(
+    io::Printer* printer) const {
   if (!SupportUnknownEnumValue(descriptor_->file()) &&
       GetJavaType(ValueField(descriptor_)) == JAVATYPE_ENUM) {
     printer->Print(
@@ -699,6 +711,11 @@ void ImmutableMapFieldGenerator::GenerateParsingCode(
     printer->Print(
         variables_,
         "if ($value_enum_type$.forNumber($name$__.getValue()) == null) {\n"
+        // FYI: It is intended that entries with unknown enum values are always
+        // treated as a 'length-delimited' field (even when called from
+        // GenerateParsingCodeFromOptimizedContainer). This effectively
+        // changes those unknown entries to use the normal (non-optimized)
+        // map field encoding scheme.
         "  unknownFields.mergeLengthDelimitedField($number$, bytes);\n"
         "} else {\n"
         "  $name$_.getMutableMap().put(\n"
@@ -715,6 +732,31 @@ void ImmutableMapFieldGenerator::GenerateParsingCode(
   }
 }
 
+void ImmutableMapFieldGenerator::GenerateParsingCodeFromOptimizedContainer(
+    io::Printer* printer) const {
+
+  printer->Print(
+      variables_,
+      "int length = input.readRawVarint32();\n"
+      "int limit = input.pushLimit(length);\n"
+      "int size = input.readRawVarint32();\n"
+      "if (!$get_mutable_bit_parser$ && input.getBytesUntilLimit() > 0) {\n"
+      "  $name$_ = com.google.protobuf.MapField.newMapField(\n"
+      "      $map_field_parameter$, size);\n"
+      "  $set_mutable_bit_parser$;\n"
+      "}\n"
+      "while (input.getBytesUntilLimit() > 0) {\n");
+
+  printer->Indent();
+  GenerateParsingCodeForMapEntry(printer);
+  printer->Outdent();
+
+  printer->Print(
+      "}\n"
+      "input.popLimit(limit);\n");
+
+}
+
 void ImmutableMapFieldGenerator::GenerateParsingDoneCode(
     io::Printer* printer) const {
   // Nothing to do here.
@@ -722,6 +764,18 @@ void ImmutableMapFieldGenerator::GenerateParsingDoneCode(
 
 void ImmutableMapFieldGenerator::GenerateSerializationCode(
     io::Printer* printer) const {
+
+  if (descriptor_->is_optimized_container()) {
+    printer->Print(variables_,
+                   "com.google.protobuf.GeneratedMessage$ver$\n"
+                   "  .serializeOptimized$short_key_type$MapTo(\n"
+                   "    output,\n"
+                   "    internalGet$capitalized_name$(),\n"
+                   "    $default_entry$,\n"
+                   "    $number$,\n"
+                   "    $name$MemoizedSerializedSize);\n");
+    return;
+  }
   printer->Print(variables_,
                  "com.google.protobuf.GeneratedMessage$ver$\n"
                  "  .serialize$short_key_type$MapTo(\n"
@@ -733,6 +787,29 @@ void ImmutableMapFieldGenerator::GenerateSerializationCode(
 
 void ImmutableMapFieldGenerator::GenerateSerializedSizeCode(
     io::Printer* printer) const {
+  if (descriptor_->is_optimized_container()) {
+    printer->Print(
+        variables_,
+        "if (internalGet$capitalized_name$().getMap().isEmpty()) {\n"
+        "  $name$MemoizedSerializedSize = 0;\n"
+        "} else {\n"
+        "  int dataSize = com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(internalGet$capitalized_name$().getMap().size());\n"
+        "  for ($boxed_value_type$ value : internalGet$capitalized_name$().getMap().values()) {\n"
+        "    com.google.protobuf.MapEntry<$type_parameters$>\n"
+        "    $name$__ = $default_entry$.newBuilderForType()\n"
+        "        .setKey(entry.getKey())\n"
+        "        .setValue(entry.getValue())\n"
+        "        .build();\n"
+        "    dataSize += com.google.protobuf.CodedOutputStream.computeMessageSizeNoTag($name$__);\n"
+        "  }\n"
+        "  $name$MemoizedSerializedSize = dataSize;\n"
+        "  size += $tag_size$;\n"
+        "  size += com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(dataSize);\n"
+        "  size += dataSize;\n"
+        "}\n");
+    return;
+  }
+
   printer->Print(
       variables_,
       "for (java.util.Map.Entry<$type_parameters$> entry\n"

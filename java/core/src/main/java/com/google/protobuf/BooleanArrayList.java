@@ -68,6 +68,10 @@ final class BooleanArrayList extends AbstractProtobufList<Boolean>
     this(new boolean[DEFAULT_CAPACITY], 0);
   }
 
+  BooleanArrayList(int capacity) {
+    this(new boolean[capacity], 0);
+  }
+
   /**
    * Constructs a new mutable {@code BooleanArrayList} containing the same elements as {@code
    * other}.

@@ -581,7 +581,7 @@ void ImmutableMessageGenerator::GenerateMessageSerializationMethods(
       "                    throws java.io.IOException {\n");
   printer->Indent();
 
-  if (HasPackedFields(descriptor_)) {
+  if (HasPackedOrOptimizedContainerFields(descriptor_)) {
     // writeTo(CodedOutputStream output) might be invoked without
     // getSerializedSize() ever being called, but we need the memoized
     // sizes in case this message has packed fields. Rather than emit checks
@@ -1235,6 +1235,23 @@ void ImmutableMessageGenerator::GenerateParsingConstructor(
       printer->Indent();
 
       field_generators_.get(field).GenerateParsingCodeFromPacked(printer);
+
+      printer->Outdent();
+      printer->Print(
+          "  break;\n"
+          "}\n");
+    }
+
+    if (field->is_container()) {
+      // To make optimized_container = true wire compatible, we generate parsing code from a
+      // optimized version of this field regardless of field->options().optimized_container().
+      uint32 container_tag = WireFormatLite::MakeTag(
+          field->number(), WireFormatLite::WIRETYPE_CONTAINER);
+      printer->Print("case $tag$: {\n", "tag",
+                     StrCat(static_cast<int32>(container_tag)));
+      printer->Indent();
+
+      field_generators_.get(field).GenerateParsingCodeFromOptimizedContainer(printer);
 
       printer->Outdent();
       printer->Print(

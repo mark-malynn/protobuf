@@ -116,6 +116,30 @@ public abstract class AbstractMessageLite<
     return memoizedSerializedSize;
   }
 
+  protected int getMessageContainerSerializeSize(List<MessageLite> list) {
+    int size = CodedOutputStream.computeUInt32SizeNoTag(list.size());
+    for (MessageLite m : list) {
+      size += m.getSerializedSize();
+    }
+    return size;
+};
+
+  protected int getInt32ContainerSerializeSize(List<Integer> list) {
+    int size = CodedOutputStream.computeUInt32SizeNoTag(list.size());
+    for (int i : list) {
+      size += CodedOutputStream.computeInt32SizeNoTag(i);
+    }
+    return size;
+  };
+
+  protected int getInt64ContainerSerializeSize(List<Long> list) {
+    int size = CodedOutputStream.computeUInt32SizeNoTag(list.size());
+    for (long i : list) {
+      size += CodedOutputStream.computeInt64SizeNoTag(i);
+    }
+    return size;
+  };
+
   /** Package private helper method for AbstractParser to create UninitializedMessageException. */
   UninitializedMessageException newUninitializedMessageException() {
     return new UninitializedMessageException(this);

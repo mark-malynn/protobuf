@@ -68,6 +68,10 @@ final class IntArrayList extends AbstractProtobufList<Integer>
     this(new int[DEFAULT_CAPACITY], 0);
   }
 
+  IntArrayList(int capacity) {
+    this(new int[capacity], 0);
+  }
+
   /**
    * Constructs a new mutable {@code IntArrayList} containing the same elements as {@code other}.
    */

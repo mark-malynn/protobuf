@@ -150,6 +150,22 @@ public class MapField<K, V> implements MutabilityOracle {
   }
 
 
+  /** Creates a new mutable empty MapField with a capacity to hold the expected size. */
+  public static <K, V> MapField<K, V> newMapField(MapEntry<K, V> defaultEntry, int expectedSize) {
+    return new MapField<K, V>(defaultEntry, StorageMode.MAP, new LinkedHashMap<K, V>(computeCapacity(expectedSize, 0.75f), 0.75f));
+  }
+
+  private static int computeCapacity(int expected, float f) {
+    if (expected <= 0) {
+      return 0;
+    }
+    double capacity =  Math.ceil(expected / f);
+    if (capacity > Integer.MAX_VALUE) {
+      return Integer.MAX_VALUE;
+    }
+    return (int)capacity;
+  }
+
   private Message convertKeyAndValueToMessage(K key, V value) {
     return converter.convertKeyAndValueToMessage(key, value);
   }

@@ -793,6 +793,10 @@ void RepeatedImmutableStringFieldGenerator::GenerateMembers(
                  "  return $name$_.getByteString(index);\n"
                  "}\n");
   printer->Annotate("{", "}", descriptor_);
+  if (descriptor_->is_optimized_container()) {
+    printer->Print(variables_,
+                   "private int $name$MemoizedSerializedSize = -1;\n");
+  }
 }
 
 void RepeatedImmutableStringFieldGenerator::GenerateBuilderMembers(
@@ -990,6 +994,34 @@ void RepeatedImmutableStringFieldGenerator::GenerateParsingCode(
   }
 }
 
+void RepeatedImmutableStringFieldGenerator::GenerateParsingCodeFromOptimizedContainer(
+    io::Printer* printer) const {
+
+  printer->Print(
+      variables_,
+      "int length = input.readRawVarint32();\n"
+      "int limit = input.pushLimit(length);\n"
+      "int size = input.readRawVarint32();\n"
+      "if (!$get_mutable_bit_parser$ && input.getBytesUntilLimit() > 0) {\n"
+      "  $name$_ = new com.google.protobuf.LazyStringArrayList(size);\n"
+      "  $set_mutable_bit_parser$;\n"
+      "}\n"
+      "while (input.getBytesUntilLimit() > 0) {\n");
+
+  if (CheckUtf8(descriptor_)) {
+    printer->Print(variables_,
+      "  $name$_.add(input.readStringRequireUtf8());\n");
+  } else {
+    printer->Print(variables_,
+      "  $name$_.add(input.readBytes());\n");
+  }
+
+  printer->Print(
+      variables_,
+      "}\n"
+      "input.popLimit(limit);\n");
+}
+
 void RepeatedImmutableStringFieldGenerator::GenerateParsingDoneCode(
     io::Printer* printer) const {
   printer->Print(variables_,
@@ -1000,6 +1032,18 @@ void RepeatedImmutableStringFieldGenerator::GenerateParsingDoneCode(
 
 void RepeatedImmutableStringFieldGenerator::GenerateSerializationCode(
     io::Printer* printer) const {
+  if (descriptor_->is_optimized_container()) {
+    printer->Print(variables_,
+                   "if ($name$_.size() > 0) {\n"
+                   "  output.writeUInt32NoTag($tag$);\n"
+                   "  output.writeUInt32NoTag($name$MemoizedSerializedSize);\n"
+                   "  output.writeUInt32NoTag($name$_.size());\n"
+                   "  for (int i = 0; i < $name$_.size(); i++) {\n"
+                   "    writeStringNoTag(output, $name$_.get(i));\n"
+                   "  }\n"
+                   "}\n");
+    return;
+  }
   printer->Print(variables_,
                  "for (int i = 0; i < $name$_.size(); i++) {\n"
                  "  $writeString$(output, $number$, $name$_.getRaw(i));\n"
@@ -1008,6 +1052,24 @@ void RepeatedImmutableStringFieldGenerator::GenerateSerializationCode(
 
 void RepeatedImmutableStringFieldGenerator::GenerateSerializedSizeCode(
     io::Printer* printer) const {
+  if (descriptor_->is_optimized_container()) {
+    printer->Print(
+        variables_,
+        "if ($name$_.isEmpty()) {\n"
+        "  $name$MemoizedSerializedSize = 0;\n"
+        "} else {\n"
+        "  int dataSize = com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag($name$_.size());\n"
+        "  for (int i = 0; i < $name$_.size(); i++) {\n"
+        "    dataSize += computeStringSizeNoTag($name$_.getRaw(i));\n"
+        "  }\n"
+        "  $name$MemoizedSerializedSize = dataSize;\n"
+        "  size += $tag_size$;\n"
+        "  size += com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(dataSize);\n"
+        "  size += dataSize;\n"
+        "}\n");
+    return;
+  }
+
   printer->Print(variables_,
                  "{\n"
                  "  int dataSize = 0;\n");

@@ -550,7 +550,6 @@ public class WireFormatLiteTest extends TestCase {
           // Zero tag is not allowed.
           0,
           // Invalid wire types.
-          (byte) WireFormat.makeTag(1, 6),
           (byte) WireFormat.makeTag(1, 7),
           // Field number 0 is not allowed.
           (byte) WireFormat.makeTag(0, WireFormat.WIRETYPE_VARINT),

@@ -399,6 +399,10 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
     return new IntArrayList();
   }
 
+  protected static IntList newIntList(int capacity) {
+    return new IntArrayList(capacity);
+  }
+
   protected static IntList mutableCopy(IntList list) {
     int size = list.size();
     return list.mutableCopyWithCapacity(
@@ -411,6 +415,10 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
 
   protected static LongList newLongList() {
     return new LongArrayList();
+  }
+
+  protected static LongList newLongList(int capacity) {
+    return new LongArrayList(capacity);
   }
 
   protected static LongList mutableCopy(LongList list) {
@@ -427,6 +435,10 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
     return new FloatArrayList();
   }
 
+  protected static FloatList newFloatList(int capacity) {
+    return new FloatArrayList(capacity);
+  }
+
   protected static FloatList mutableCopy(FloatList list) {
     int size = list.size();
     return list.mutableCopyWithCapacity(
@@ -441,6 +453,10 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
     return new DoubleArrayList();
   }
 
+  protected static DoubleList newDoubleList(int capacity) {
+    return new DoubleArrayList(capacity);
+  }
+
   protected static DoubleList mutableCopy(DoubleList list) {
     int size = list.size();
     return list.mutableCopyWithCapacity(
@@ -453,6 +469,10 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
 
   protected static BooleanList newBooleanList() {
     return new BooleanArrayList();
+  }
+
+  protected static BooleanList newBooleanList(int capacity) {
+    return new BooleanArrayList(capacity);
   }
 
   protected static BooleanList mutableCopy(BooleanList list) {
@@ -3227,6 +3247,120 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
               .setValue(entry.getValue())
               .build());
     }
+  }
+
+  protected static <V> void serializeOptimizedIntegerMapTo(
+      CodedOutputStream out,
+      MapField<Integer, V> field,
+      MapEntry<Integer, V> defaultEntry,
+      int fieldNumber,
+      int serializedSize) throws IOException {
+    Map<Integer, V> m = field.getMap();
+    if (!out.isSerializationDeterministic()) {
+      serializeOptimizedMapTo(out, m, defaultEntry, fieldNumber, serializedSize);
+      return;
+    }
+    // Sorting the unboxed keys and then look up the values during serialization is 2x faster
+    // than sorting map entries with a custom comparator directly.
+    int[] keys = new int[m.size()];
+    int index = 0;
+    for (int k : m.keySet()) {
+      keys[index++] = k;
+    }
+    Arrays.sort(keys);
+    writeOptimizedMapHeaderTo(out, fieldNumber, serializedSize, keys.length);
+    for (int key : keys) {
+      out.writeMessageNoTag(
+          defaultEntry.newBuilderForType()
+              .setKey(key)
+              .setValue(m.get(key))
+              .build());
+    }
+  }
+
+  protected static <V> void serializeOptimizedLongMapTo(
+      CodedOutputStream out,
+      MapField<Long, V> field,
+      MapEntry<Long, V> defaultEntry,
+      int fieldNumber,
+      int serializedSize)
+      throws IOException {
+    Map<Long, V> m = field.getMap();
+    if (!out.isSerializationDeterministic()) {
+      serializeOptimizedMapTo(out, m, defaultEntry, fieldNumber, serializedSize);
+      return;
+    }
+
+    long[] keys = new long[m.size()];
+    int index = 0;
+    for (long k : m.keySet()) {
+      keys[index++] = k;
+    }
+    Arrays.sort(keys);
+    writeOptimizedMapHeaderTo(out, fieldNumber, serializedSize, keys.length);
+    for (long key : keys) {
+      out.writeMessageNoTag(
+          defaultEntry.newBuilderForType()
+              .setKey(key)
+              .setValue(m.get(key))
+              .build());
+    }
+  }
+
+  protected static <V> void serializeOptimizedStringMapTo(
+      CodedOutputStream out,
+      MapField<String, V> field,
+      MapEntry<String, V> defaultEntry,
+      int fieldNumber,
+      int serializedSize)
+      throws IOException {
+    Map<String, V> m = field.getMap();
+    if (!out.isSerializationDeterministic()) {
+      serializeOptimizedMapTo(out, m, defaultEntry, fieldNumber, serializedSize);
+      return;
+    }
+
+    // Sorting the String keys and then look up the values during serialization is 25% faster than
+    // sorting map entries with a custom comparator directly.
+    String[] keys = new String[m.size()];
+    keys = m.keySet().toArray(keys);
+    Arrays.sort(keys);
+    writeOptimizedMapHeaderTo(out, fieldNumber, serializedSize, keys.length);
+    for (String key : keys) {
+      out.writeMessageNoTag(
+          defaultEntry.newBuilderForType()
+              .setKey(key)
+              .setValue(m.get(key))
+              .build());
+    }
+  }
+
+  private static <K, V> void serializeOptimizedMapTo(
+      CodedOutputStream out,
+      Map<K, V> m,
+      MapEntry<K, V> defaultEntry,
+      int fieldNumber,
+      int serializedSize)
+      throws IOException {
+    writeOptimizedMapHeaderTo(out, fieldNumber, serializedSize, m.size());
+    for (Map.Entry<K, V> entry : m.entrySet()) {
+      out.writeMessageNoTag(
+          defaultEntry.newBuilderForType()
+              .setKey(entry.getKey())
+              .setValue(entry.getValue())
+              .build());
+    }
+  }
+
+  private static void writeOptimizedMapHeaderTo(
+      CodedOutputStream out, 
+      int fieldNumber, 
+      int serializedSize, 
+      int entryCount) 
+      throws IOException {
+    out.writeTag(fieldNumber, WireFormat.WIRETYPE_CONTAINER);
+    out.writeUInt32NoTag(serializedSize);
+    out.writeUInt32NoTag(entryCount);
   }
 }
 
