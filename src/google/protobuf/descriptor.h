@@ -700,6 +700,8 @@ class PROTOBUF_EXPORT FieldDescriptor {
                              //               options().packed()
   bool is_map() const;       // shorthand for type() == TYPE_MESSAGE &&
                              // message_type()->options().map_entry()
+  bool is_container() const; // shorthand for is_repeated() || is_map()
+  bool is_optimized_container() const; // true if is_container() and field is to be serialized with WIRETYPE_CONTAINER.
 
   // Returns true if this field was syntactically written with "optional" in the
   // .proto file. Excludes singular proto3 fields that do not have a label.
@@ -2188,6 +2190,10 @@ inline bool FieldDescriptor::is_packable() const {
 
 inline bool FieldDescriptor::is_map() const {
   return type() == TYPE_MESSAGE && is_map_message_type();
+}
+
+inline bool FieldDescriptor::is_container() const {
+  return is_repeated() || is_map();
 }
 
 inline bool FieldDescriptor::has_optional_keyword() const {

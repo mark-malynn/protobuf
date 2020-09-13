@@ -2999,6 +2999,12 @@ bool FieldDescriptor::is_packed() const {
   }
 }
 
+bool FieldDescriptor::is_optimized_container() const {
+  if (!is_container()) return false;
+  if (options_ == nullptr || !options_->has_optimized_container()) return file_->options().optimized_container_default();
+  return options_->optimized_container();
+}
+
 bool Descriptor::GetSourceLocation(SourceLocation* out_location) const {
   std::vector<int> path;
   GetLocationPath(&path);
