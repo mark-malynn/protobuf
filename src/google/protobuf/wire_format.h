@@ -82,6 +82,10 @@ class PROTOBUF_EXPORT WireFormat {
   static inline WireFormatLite::WireType WireTypeForField(
       const FieldDescriptor* field);
 
+  // Given a field return its container WireType
+  static inline WireFormatLite::WireType ContainerWireTypeForField(
+      const FieldDescriptor* field);
+
   // Given a FieldDescriptor::Type return its WireType
   static inline WireFormatLite::WireType WireTypeForFieldType(
       FieldDescriptor::Type type);
@@ -332,6 +336,11 @@ inline WireFormatLite::WireType WireFormat::WireTypeForField(
   } else {
     return WireTypeForFieldType(field->type());
   }
+}
+
+inline WireFormatLite::WireType WireFormat::ContainerWireTypeForField(
+    const FieldDescriptor* field) {
+  return WireTypeForFieldType(field->type());
 }
 
 inline WireFormatLite::WireType WireFormat::WireTypeForFieldType(

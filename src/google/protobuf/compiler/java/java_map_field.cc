@@ -84,6 +84,8 @@ void SetMessageVariables(const FieldDescriptor* descriptor, int messageBitIndex,
 
   (*variables)["tag_size"] = StrCat(
       internal::WireFormat::TagSize(descriptor->number(), GetType(descriptor)));
+  (*variables)["container_wire_type"] = StrCat(
+      internal::WireFormat::ContainerWireTypeForField(descriptor));
   (*variables)["type"] =
       name_resolver->GetImmutableClassName(descriptor->message_type());
   const FieldDescriptor* key = KeyField(descriptor);
@@ -318,10 +320,6 @@ void ImmutableMapFieldGenerator::GenerateMembers(io::Printer* printer) const {
         "}\n");
   }
   GenerateMapGetters(printer);
-  if (descriptor_->is_optimized_container()) {
-    printer->Print(variables_,
-                   "private int $name$MemoizedSerializedSize = -1;\n");
-  }
 }
 
 void ImmutableMapFieldGenerator::GenerateBuilderMembers(
@@ -737,24 +735,19 @@ void ImmutableMapFieldGenerator::GenerateParsingCodeFromOptimizedContainer(
 
   printer->Print(
       variables_,
-      "int length = input.readRawVarint32();\n"
-      "int limit = input.pushLimit(length);\n"
-      "int size = input.readRawVarint32();\n"
-      "if (!$get_mutable_bit_parser$ && input.getBytesUntilLimit() > 0) {\n"
+      "int size = input.readContainerSize();\n"
+      "if (!$get_mutable_bit_parser$ && size > 0) {\n"
       "  $name$_ = com.google.protobuf.MapField.newMapField(\n"
       "      $map_field_parameter$, size);\n"
       "  $set_mutable_bit_parser$;\n"
       "}\n"
-      "while (input.getBytesUntilLimit() > 0) {\n");
+      "while (--size >= 0) {\n");
 
   printer->Indent();
   GenerateParsingCodeForMapEntry(printer);
   printer->Outdent();
 
-  printer->Print(
-      "}\n"
-      "input.popLimit(limit);\n");
-
+  printer->Print("}\n");
 }
 
 void ImmutableMapFieldGenerator::GenerateParsingDoneCode(
@@ -773,7 +766,7 @@ void ImmutableMapFieldGenerator::GenerateSerializationCode(
                    "    internalGet$capitalized_name$(),\n"
                    "    $default_entry$,\n"
                    "    $number$,\n"
-                   "    $name$MemoizedSerializedSize);\n");
+                   "    $container_wire_type$);\n");
     return;
   }
   printer->Print(variables_,
@@ -790,10 +783,8 @@ void ImmutableMapFieldGenerator::GenerateSerializedSizeCode(
   if (descriptor_->is_optimized_container()) {
     printer->Print(
         variables_,
-        "if (internalGet$capitalized_name$().getMap().isEmpty()) {\n"
-        "  $name$MemoizedSerializedSize = 0;\n"
-        "} else {\n"
-        "  int dataSize = com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(internalGet$capitalized_name$().getMap().size());\n"
+        "if (!internalGet$capitalized_name$().getMap().isEmpty()) {\n"
+        "  int dataSize = com.google.protobuf.CodedOutputStream.computeContainerTagSize(internalGet$capitalized_name$().getMap().size());\n"
         "  for ($boxed_value_type$ value : internalGet$capitalized_name$().getMap().values()) {\n"
         "    com.google.protobuf.MapEntry<$type_parameters$>\n"
         "    $name$__ = $default_entry$.newBuilderForType()\n"
@@ -802,9 +793,7 @@ void ImmutableMapFieldGenerator::GenerateSerializedSizeCode(
         "        .build();\n"
         "    dataSize += com.google.protobuf.CodedOutputStream.computeMessageSizeNoTag($name$__);\n"
         "  }\n"
-        "  $name$MemoizedSerializedSize = dataSize;\n"
         "  size += $tag_size$;\n"
-        "  size += com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(dataSize);\n"
         "  size += dataSize;\n"
         "}\n");
     return;

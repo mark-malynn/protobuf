@@ -578,6 +578,23 @@ public abstract class CodedInputStream {
   }
 
   /**
+   * Attempt to read a container tag. Container tags are used by 
+   * WIRETYPE_CONTAINER so they can extract both the number of entries
+   * and the wire type of said entries.
+   */
+  public long readContainerTag() throws IOException {
+    return readRawVarint64();
+  }
+
+  public int readContainerSize() throws IOException {
+    long count = WireFormat.getContainerTagSize(readContainerTag());
+    if (count > Integer.MAX_VALUE) {
+      throw InvalidProtocolBufferException.invalidCountTag();
+    }
+    return (int)count;
+  }
+
+  /**
    * Reads a varint from the input one byte at a time, so that it does not read any bytes after the
    * end of the varint. If you simply wrapped the stream in a CodedInputStream and used {@link
    * #readRawVarint32(InputStream)} then you would probably end up reading past the end of the
@@ -651,7 +668,6 @@ public abstract class CodedInputStream {
           skipRawBytes(FIXED64_SIZE);
           return true;
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
-        case WireFormat.WIRETYPE_CONTAINER:
           skipRawBytes(readRawVarint32());
           return true;
         case WireFormat.WIRETYPE_START_GROUP:
@@ -663,6 +679,17 @@ public abstract class CodedInputStream {
           return false;
         case WireFormat.WIRETYPE_FIXED32:
           skipRawBytes(FIXED32_SIZE);
+          return true;
+        case WireFormat.WIRETYPE_CONTAINER:
+          long countTag = readContainerTag();
+          int countTagWireType = WireFormat.getContainerTagWireType(countTag);
+          long containerSize = WireFormat.getContainerTagSize(countTag);
+          if (containerSize > Integer.MAX_VALUE) {
+            throw InvalidProtocolBufferException.invalidCountTag();
+          }
+          for (int i= 0; i < containerSize; ++i) {
+            skipField(countTagWireType);
+          }
           return true;
         default:
           throw InvalidProtocolBufferException.invalidWireType();

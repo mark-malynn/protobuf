@@ -697,6 +697,7 @@ class PROTOBUF_EXPORT FieldDescriptor {
   bool is_packable() const;  // shorthand for is_repeated() &&
                              //               IsTypePackable(type())
   bool is_packed() const;    // shorthand for is_packable() &&
+                             //               !is_optimized_container() &&
                              //               options().packed()
   bool is_map() const;       // shorthand for type() == TYPE_MESSAGE &&
                              // message_type()->options().map_entry()

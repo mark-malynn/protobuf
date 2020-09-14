@@ -2992,6 +2992,7 @@ bool FileDescriptor::GetSourceLocation(SourceLocation* out_location) const {
 
 bool FieldDescriptor::is_packed() const {
   if (!is_packable()) return false;
+  if (is_optimized_container()) return false;
   if (file_->syntax() == FileDescriptor::SYNTAX_PROTO2) {
     return (options_ != nullptr) && options_->packed();
   } else {

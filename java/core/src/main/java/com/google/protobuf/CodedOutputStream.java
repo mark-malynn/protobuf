@@ -229,6 +229,11 @@ public abstract class CodedOutputStream extends ByteOutput {
   // Abstract to avoid overhead of additional virtual method calls.
   public abstract void writeTag(int fieldNumber, int wireType) throws IOException;
 
+  /** Encode and write a container tag. */
+  public final void writeContainerTag(int count, int wireType) throws IOException {
+    writeUInt64NoTag(WireFormat.makeContainerTag(count, wireType));
+  }
+
   /** Write an {@code int32} field, including tag, to the stream. */
   // Abstract to avoid overhead of additional virtual method calls.
   public abstract void writeInt32(int fieldNumber, int value) throws IOException;
@@ -708,6 +713,11 @@ public abstract class CodedOutputStream extends ByteOutput {
   /** Compute the number of bytes that would be needed to encode a tag. */
   public static int computeTagSize(final int fieldNumber) {
     return computeUInt32SizeNoTag(WireFormat.makeTag(fieldNumber, 0));
+  }
+
+  /** Compute the number of bytes that would be needed to encode a container tag. */
+  public static int computeContainerTagSize(final int count) {
+    return computeUInt64SizeNoTag(WireFormat.makeContainerTag(count, 0));
   }
 
   /**

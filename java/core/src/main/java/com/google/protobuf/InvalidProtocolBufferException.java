@@ -102,6 +102,10 @@ public class InvalidProtocolBufferException extends IOException {
     return new InvalidProtocolBufferException("Protocol message contained an invalid tag (zero).");
   }
 
+  static InvalidProtocolBufferException invalidCountTag() {
+    return new InvalidProtocolBufferException("Protocol message contained an invalid count tag.");
+  }
+
   static InvalidProtocolBufferException invalidEndTag() {
     return new InvalidProtocolBufferException(
         "Protocol message end-group tag did not match expected tag.");

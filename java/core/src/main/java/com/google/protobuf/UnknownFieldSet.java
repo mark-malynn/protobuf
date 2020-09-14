@@ -553,9 +553,29 @@ public final class UnknownFieldSet implements MessageLite {
         case WireFormat.WIRETYPE_FIXED32:
           getFieldBuilder(number).addFixed32(input.readFixed32());
           return true;
-        case WireFormat.WIRETYPE_CONTAINER:
-          getFieldBuilder(number).addContainer(input.readBytes());
+        case WireFormat.WIRETYPE_CONTAINER: {
+          // FYI: Following code effectively converts a optimized_container wire
+          //      format to an old fashioned repeated field wire format (which
+          //      is serialized as a tag, value pair).
+          // TODO: this unknown field implementation works, but is a bit lazy 
+          // and doesn't allow 'optimized' serialization/deserialization for 
+          // unknown container fields. This is fine for a prototype... but do
+          // want this in prod code? We could add an isContainer boolean field 
+          // to Field and set getFieldBuilder(number).isContainer = true, here. 
+          // Then, when writing out a Field, we can check isContainer and 'do 
+          // the right thing'.
+          long countTag = input.readContainerTag();
+          int countTagWireType = WireFormat.getContainerTagWireType(countTag);
+          long containerSize = WireFormat.getContainerTagSize(countTag);
+          if (containerSize > Integer.MAX_VALUE) {
+            throw InvalidProtocolBufferException.invalidCountTag();
+          }
+          int newTag = WireFormat.makeTag(number, countTagWireType);
+          for (int i= 0; i < containerSize; ++i) {
+            mergeFieldFrom(newTag, input);
+          }
           return true;
+        }
         default:
           throw InvalidProtocolBufferException.invalidWireType();
       }
@@ -752,11 +772,6 @@ public final class UnknownFieldSet implements MessageLite {
       return lengthDelimited;
     }
 
-    /** Get the list of container values for this field. */
-    public List<ByteString> getContainerList() {
-      return container;
-    }
-
     /**
      * Get the list of embedded group values for this field. These are represented using {@link
      * UnknownFieldSet}s rather than {@link Message}s since the group's type is presumably unknown.
@@ -783,7 +798,7 @@ public final class UnknownFieldSet implements MessageLite {
 
     /** Returns the array of objects to be used to uniquely identify this {@link Field} instance. */
     private Object[] getIdentityArray() {
-      return new Object[] {varint, fixed32, fixed64, lengthDelimited, group, container};
+      return new Object[] {varint, fixed32, fixed64, lengthDelimited, group};
     }
 
     /**
@@ -840,9 +855,6 @@ public final class UnknownFieldSet implements MessageLite {
       for (final UnknownFieldSet value : group) {
         result += CodedOutputStream.computeGroupSize(fieldNumber, value);
       }
-      for (final ByteString value : container) {
-        result += CodedOutputStream.computeBytesSize(fieldNumber, value);
-      }
       return result;
     }
 
@@ -863,7 +875,6 @@ public final class UnknownFieldSet implements MessageLite {
       writer.writeFixed32List(fieldNumber, fixed32, false);
       writer.writeFixed64List(fieldNumber, fixed64, false);
       writer.writeBytesList(fieldNumber, lengthDelimited);
-      writer.writeBytesList(fieldNumber, container);
 
       if (writer.fieldOrder() == Writer.FieldOrder.ASCENDING) {
         for (int i = 0; i < group.size(); i++) {
@@ -917,7 +928,6 @@ public final class UnknownFieldSet implements MessageLite {
     private List<Long> fixed64;
     private List<ByteString> lengthDelimited;
     private List<UnknownFieldSet> group;
-    private List<ByteString> container;
 
     /**
      * Used to build a {@link Field} within an {@link UnknownFieldSet}.
@@ -967,11 +977,6 @@ public final class UnknownFieldSet implements MessageLite {
         } else {
           result.group = Collections.unmodifiableList(result.group);
         }
-        if (result.container == null) {
-          result.container = Collections.emptyList();
-        } else {
-          result.container = Collections.unmodifiableList(result.container);
-        }
 
         final Field returnMe = result;
         result = null;
@@ -1018,12 +1023,6 @@ public final class UnknownFieldSet implements MessageLite {
             result.group = new ArrayList<UnknownFieldSet>();
           }
           result.group.addAll(other.group);
-        }
-        if (!other.container.isEmpty()) {
-          if (result.container == null) {
-            result.container = new ArrayList<ByteString>();
-          }
-          result.container.addAll(other.container);
         }
         return this;
       }
@@ -1073,15 +1072,6 @@ public final class UnknownFieldSet implements MessageLite {
         return this;
       }
       
-      /** Add a container value. */
-      public Builder addContainer(final ByteString value) {
-        if (result.container == null) {
-          result.container = new ArrayList<ByteString>();
-        }
-        result.container.add(value);
-        return this;
-      }
-
     }
   }
 

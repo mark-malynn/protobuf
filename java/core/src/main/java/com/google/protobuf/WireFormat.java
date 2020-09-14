@@ -77,6 +77,23 @@ public final class WireFormat {
   static int makeTag(final int fieldNumber, final int wireType) {
     return (fieldNumber << TAG_TYPE_BITS) | wireType;
   }
+  
+  /** Makes a container tag. */
+  static long makeContainerTag(final int size, final int wireType) {
+    return (((long)size) << TAG_TYPE_BITS) | wireType;
+  }
+
+  /**
+   * Given a count tag value, returns the count value. This value should fit in an int.
+   * CodedInputStream will cast it to int after doing validation.
+   */
+  static long getContainerTagSize(final long containerTag) {
+    return containerTag >>> TAG_TYPE_BITS;
+  }
+  
+  static int getContainerTagWireType(final long containerTag) {
+    return (int)(containerTag & TAG_TYPE_MASK);
+  }
 
   /**
    * Lite equivalent to {@link Descriptors.FieldDescriptor.JavaType}. This is only here to support
