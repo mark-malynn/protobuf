@@ -581,7 +581,7 @@ void ImmutableMessageGenerator::GenerateMessageSerializationMethods(
       "                    throws java.io.IOException {\n");
   printer->Indent();
 
-  if (HasPackedOrOptimizedContainerFields(descriptor_)) {
+  if (HasPackedFields(descriptor_)) {
     // writeTo(CodedOutputStream output) might be invoked without
     // getSerializedSize() ever being called, but we need the memoized
     // sizes in case this message has packed fields. Rather than emit checks
