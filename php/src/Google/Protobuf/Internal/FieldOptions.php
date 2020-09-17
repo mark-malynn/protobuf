@@ -88,9 +88,9 @@ class FieldOptions extends \Google\Protobuf\Internal\Message
      */
     protected $deprecated = null;
     /**
-     * Generated from protobuf field <code>optional bool optimized_container = 7 [default = false];</code>
+     * Generated from protobuf field <code>optional bool optimized_collection = 7 [default = false];</code>
      */
-    protected $optimized_container = null;
+    protected $optimized_collection = null;
     /**
      * For Google-internal migration only. Do not use.
      *
@@ -162,7 +162,7 @@ class FieldOptions extends \Google\Protobuf\Internal\Message
      *           Depending on the target platform, this can emit Deprecated annotations
      *           for accessors, or it will be completely ignored; in the very least, this
      *           is a formalization for deprecating fields.
-     *     @type bool $optimized_container
+     *     @type bool $optimized_collection
      *     @type bool $weak
      *           For Google-internal migration only. Do not use.
      *     @type \Google\Protobuf\Internal\UninterpretedOption[]|\Google\Protobuf\Internal\RepeatedField $uninterpreted_option
@@ -439,33 +439,33 @@ class FieldOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>optional bool optimized_container = 7 [default = false];</code>
+     * Generated from protobuf field <code>optional bool optimized_collection = 7 [default = false];</code>
      * @return bool
      */
-    public function getOptimizedContainer()
+    public function getOptimizedCollection()
     {
-        return isset($this->optimized_container) ? $this->optimized_container : false;
+        return isset($this->optimized_collection) ? $this->optimized_collection : false;
     }
 
-    public function hasOptimizedContainer()
+    public function hasOptimizedCollection()
     {
-        return isset($this->optimized_container);
+        return isset($this->optimized_collection);
     }
 
-    public function clearOptimizedContainer()
+    public function clearOptimizedCollection()
     {
-        unset($this->optimized_container);
+        unset($this->optimized_collection);
     }
 
     /**
-     * Generated from protobuf field <code>optional bool optimized_container = 7 [default = false];</code>
+     * Generated from protobuf field <code>optional bool optimized_collection = 7 [default = false];</code>
      * @param bool $var
      * @return $this
      */
-    public function setOptimizedContainer($var)
+    public function setOptimizedCollection($var)
     {
         GPBUtil::checkBool($var);
-        $this->optimized_container = $var;
+        $this->optimized_collection = $var;
 
         return $this;
     }
