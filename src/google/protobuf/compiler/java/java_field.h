@@ -78,7 +78,7 @@ class ImmutableFieldGenerator {
   virtual void GenerateBuildingCode(io::Printer* printer) const = 0;
   virtual void GenerateParsingCode(io::Printer* printer) const = 0;
   virtual void GenerateParsingCodeFromPacked(io::Printer* printer) const;
-  virtual void GenerateParsingCodeFromOptimizedContainer(io::Printer* printer) const;
+  virtual void GenerateParsingCodeFromOptimizedCollection(io::Printer* printer) const;
   virtual void GenerateParsingDoneCode(io::Printer* printer) const = 0;
   virtual void GenerateSerializationCode(io::Printer* printer) const = 0;
   virtual void GenerateSerializedSizeCode(io::Printer* printer) const = 0;

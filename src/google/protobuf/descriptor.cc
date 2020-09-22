@@ -2992,7 +2992,7 @@ bool FileDescriptor::GetSourceLocation(SourceLocation* out_location) const {
 
 bool FieldDescriptor::is_packed() const {
   if (!is_packable()) return false;
-  if (is_optimized_container()) return false;
+  if (is_optimized_collection()) return false;
   if (file_->syntax() == FileDescriptor::SYNTAX_PROTO2) {
     return (options_ != nullptr) && options_->packed();
   } else {
@@ -3000,10 +3000,10 @@ bool FieldDescriptor::is_packed() const {
   }
 }
 
-bool FieldDescriptor::is_optimized_container() const {
-  if (!is_container()) return false;
-  if (options_ == nullptr || !options_->has_optimized_container()) return file_->options().optimized_container_default();
-  return options_->optimized_container();
+bool FieldDescriptor::is_optimized_collection() const {
+  if (!is_collection()) return false;
+  if (options_ == nullptr || !options_->has_optimized_collection()) return file_->options().optimized_collection_default();
+  return options_->optimized_collection();
 }
 
 bool Descriptor::GetSourceLocation(SourceLocation* out_location) const {

@@ -1740,9 +1740,9 @@ class ParseLoopGenerator {
         GOOGLE_LOG(FATAL) << "Can't have end group field\n";
         break;
       }
-      case WireFormatLite::WIRETYPE_CONTAINER: {
-        // TODO: implement support for WireFormatLite::WIRETYPE_CONTAINER
-        GOOGLE_LOG(FATAL) << "TODO: implement support for WireFormatLite::WIRETYPE_CONTAINER\n";
+      case WireFormatLite::WIRETYPE_COLLECTION: {
+        // TODO: implement support for WireFormatLite::WIRETYPE_COLLECTION
+        GOOGLE_LOG(FATAL) << "TODO: implement support for WireFormatLite::WIRETYPE_COLLECTION\n";
         break;
       }
     }  // switch (wire_type)

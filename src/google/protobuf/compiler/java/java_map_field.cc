@@ -84,8 +84,7 @@ void SetMessageVariables(const FieldDescriptor* descriptor, int messageBitIndex,
 
   (*variables)["tag_size"] = StrCat(
       internal::WireFormat::TagSize(descriptor->number(), GetType(descriptor)));
-  (*variables)["container_wire_type"] = StrCat(
-      internal::WireFormat::ContainerWireTypeForField(descriptor));
+  (*variables)["map_tag_size"] = "1"; // map tag size is always 1 byte
   (*variables)["type"] =
       name_resolver->GetImmutableClassName(descriptor->message_type());
   const FieldDescriptor* key = KeyField(descriptor);
@@ -93,12 +92,24 @@ void SetMessageVariables(const FieldDescriptor* descriptor, int messageBitIndex,
   const JavaType keyJavaType = GetJavaType(key);
   const JavaType valueJavaType = GetJavaType(value);
 
+  if (descriptor->is_optimized_collection()) {
+    int key_fixed_size = FixedSize(GetType(key));
+    if (key_fixed_size != -1) {
+      (*variables)["key_fixed_size"] = StrCat(key_fixed_size);
+    }
+    int value_fixed_size = FixedSize(GetType(value));
+    if (value_fixed_size != -1) {
+      (*variables)["value_fixed_size"] = StrCat(value_fixed_size);
+    }
+  }
+
   (*variables)["key_type"] = TypeName(key, name_resolver, false);
   std::string boxed_key_type = TypeName(key, name_resolver, true);
   (*variables)["boxed_key_type"] = boxed_key_type;
   // Used for calling the serialization function.
   (*variables)["short_key_type"] =
       boxed_key_type.substr(boxed_key_type.rfind('.') + 1);
+  (*variables)["cap_key_type"] = GetCapitalizedType(key, /* immutable = */ true);
   (*variables)["key_wire_type"] = WireType(key);
   (*variables)["key_default_value"] = DefaultValue(key, true, name_resolver);
   (*variables)["key_null_check"] =
@@ -113,6 +124,7 @@ void SetMessageVariables(const FieldDescriptor* descriptor, int messageBitIndex,
     // We store enums as Integers internally.
     (*variables)["value_type"] = "int";
     (*variables)["boxed_value_type"] = "java.lang.Integer";
+    (*variables)["cap_value_type"] = "Integer";
     (*variables)["value_wire_type"] = WireType(value);
     (*variables)["value_default_value"] =
         DefaultValue(value, true, name_resolver) + ".getNumber()";
@@ -130,11 +142,15 @@ void SetMessageVariables(const FieldDescriptor* descriptor, int messageBitIndex,
     }
   } else {
     (*variables)["value_type"] = TypeName(value, name_resolver, false);
-    (*variables)["boxed_value_type"] = TypeName(value, name_resolver, true);
+    std::string boxed_value_type = TypeName(value, name_resolver, true);
+    (*variables)["boxed_value_type"] = boxed_value_type;
+    (*variables)["cap_value_type"] = GetCapitalizedType(value, /* immutable = */ true);
     (*variables)["value_wire_type"] = WireType(value);
     (*variables)["value_default_value"] =
         DefaultValue(value, true, name_resolver);
   }
+  (*variables)["value_get_parser"] =
+      ExposePublicParser(value->message_type()->file()) ? "PARSER" : "parser()";
   (*variables)["type_parameters"] =
       (*variables)["boxed_key_type"] + ", " + (*variables)["boxed_value_type"];
   // TODO(birdo): Add @deprecated javadoc when generating javadoc is supported
@@ -694,11 +710,6 @@ void ImmutableMapFieldGenerator::GenerateParsingCode(
                  "      $map_field_parameter$);\n"
                  "  $set_mutable_bit_parser$;\n"
                  "}\n");
-  GenerateParsingCodeForMapEntry(printer);
-}
-
-void ImmutableMapFieldGenerator::GenerateParsingCodeForMapEntry(
-    io::Printer* printer) const {
   if (!SupportUnknownEnumValue(descriptor_->file()) &&
       GetJavaType(ValueField(descriptor_)) == JAVATYPE_ENUM) {
     printer->Print(
@@ -709,11 +720,6 @@ void ImmutableMapFieldGenerator::GenerateParsingCodeForMapEntry(
     printer->Print(
         variables_,
         "if ($value_enum_type$.forNumber($name$__.getValue()) == null) {\n"
-        // FYI: It is intended that entries with unknown enum values are always
-        // treated as a 'length-delimited' field (even when called from
-        // GenerateParsingCodeFromOptimizedContainer). This effectively
-        // changes those unknown entries to use the normal (non-optimized)
-        // map field encoding scheme.
         "  unknownFields.mergeLengthDelimitedField($number$, bytes);\n"
         "} else {\n"
         "  $name$_.getMutableMap().put(\n"
@@ -730,23 +736,50 @@ void ImmutableMapFieldGenerator::GenerateParsingCodeForMapEntry(
   }
 }
 
-void ImmutableMapFieldGenerator::GenerateParsingCodeFromOptimizedContainer(
+void ImmutableMapFieldGenerator::GenerateParsingCodeFromOptimizedCollection(
     io::Printer* printer) const {
 
-  printer->Print(
-      variables_,
-      "int size = input.readContainerSize();\n"
+  printer->Print(variables_,
+      "int size = input.readCollectionSize();\n"
       "if (!$get_mutable_bit_parser$ && size > 0) {\n"
       "  $name$_ = com.google.protobuf.MapField.newMapField(\n"
       "      $map_field_parameter$, size);\n"
       "  $set_mutable_bit_parser$;\n"
       "}\n"
-      "while (--size >= 0) {\n");
+      "input.readMapTag();\n"
+      "java.util.Map<$type_parameters$> map = $name$_.getMutableMap();\n"
+      "while (--size >= 0) {\n"
+      "  $key_type$ key = input.read$cap_key_type$();\n");
 
   printer->Indent();
-  GenerateParsingCodeForMapEntry(printer);
-  printer->Outdent();
+  if (GetJavaType(ValueField(descriptor_)) == JAVATYPE_MESSAGE) {
+    printer->Print(variables_,
+        "$value_type$ value = input.readMessage($value_type$.$value_get_parser$, "
+        "extensionRegistry);\n");
 
+  } else {
+    printer->Print(variables_,
+        "$value_type$ value = input.read$cap_value_type$();\n");
+
+    if (!SupportUnknownEnumValue(descriptor_->file()) &&
+        GetJavaType(ValueField(descriptor_)) == JAVATYPE_ENUM) {
+      // Need to special case unknown enum.
+      printer->Print(variables_,
+          // Add non-optimized map entry if the enum is unknown.
+          "if ($value_enum_type$.forNumber(value) == null) {\n"
+          "  java.io.ByteArrayOutputStream baos = new ByteArrayOutputStream(0);\n"
+          "  com.google.protobuf.CodedOutputStream out = com.google.protobuf.CodedOutputStream.newInstance(baos);\n"
+          "  out.write$cap_key_type$(1, key);\n"
+          "  out.write$cap_value_type$(2, value);\n"
+          "  out.flush();\n"
+          "  unknownFields.mergeLengthDelimitedField($number$,\n"
+          "      com.google.protobuf.UnsafeByteOperations.unsafeWrap(baos.toByteArray()));\n"
+          "  continue;\n"
+          "}\n");
+    }
+  }
+  printer->Print("map.put(key, value);\n");
+  printer->Outdent();
   printer->Print("}\n");
 }
 
@@ -758,15 +791,24 @@ void ImmutableMapFieldGenerator::GenerateParsingDoneCode(
 void ImmutableMapFieldGenerator::GenerateSerializationCode(
     io::Printer* printer) const {
 
-  if (descriptor_->is_optimized_container()) {
+  if (descriptor_->is_optimized_collection()) {
     printer->Print(variables_,
-                   "com.google.protobuf.GeneratedMessage$ver$\n"
-                   "  .serializeOptimized$short_key_type$MapTo(\n"
-                   "    output,\n"
-                   "    internalGet$capitalized_name$(),\n"
-                   "    $default_entry$,\n"
-                   "    $number$,\n"
-                   "    $container_wire_type$);\n");
+                   "{\n"
+                   "  java.util.Map<$type_parameters$> map = internalGet$capitalized_name$().getMap();\n"
+                   "  if (map.size() > 0) {\n"
+                   "    output.writeOptimizedMapHeader($number$, map.size(), $map_tag$);\n"
+                   "    for (java.util.Map.Entry<$type_parameters$> entry : map.entrySet()) {\n"
+                   "      output.write$cap_key_type$NoTag(entry.getKey());\n");
+
+    if (GetJavaType(ValueField(descriptor_)) == JAVATYPE_MESSAGE) {
+      printer->Print("      output.writeMessageNoTag(entry.getValue());\n");
+    } else {
+      printer->Print(variables_,
+                     "      output.write$cap_value_type$NoTag(entry.getValue());\n");
+    }
+    printer->Print("    }\n"
+                   "  }\n"
+                   "}\n");
     return;
   }
   printer->Print(variables_,
@@ -780,21 +822,50 @@ void ImmutableMapFieldGenerator::GenerateSerializationCode(
 
 void ImmutableMapFieldGenerator::GenerateSerializedSizeCode(
     io::Printer* printer) const {
-  if (descriptor_->is_optimized_container()) {
+  if (descriptor_->is_optimized_collection()) {
+    printer->Print(variables_,
+        "{\n"
+        "  java.util.Map<$type_parameters$> map = internalGet$capitalized_name$().getMap();\n"
+        "  if (map.size() > 0) {\n"
+        "    size += $tag_size$;\n"
+        "    size += com.google.protobuf.CodedOutputStream.computeCollectionTagSize(map.size());\n"
+        "    size += $map_tag_size$;\n");
+
+    printer->Indent();
+    printer->Indent();
+
+    bool is_fixed_key = variables_.find("key_fixed_size") != variables_.end();
+    bool is_fixed_value = variables_.find("value_fixed_size") != variables_.end();
+    if (is_fixed_key) {
+      printer->Print(variables_, "size += $key_fixed_size$ * map.size()\n");
+    }
+    if (is_fixed_value) {
+      printer->Print(variables_, "size += $value_fixed_size$ * map.size()\n");
+    }
+    if (!is_fixed_key || !is_fixed_value) {
+      printer->Print(variables_,
+          "for (java.util.Map.Entry<$type_parameters$> entry : map.entrySet()) {\n");
+      printer->Indent();
+      if (!is_fixed_key) {
+        printer->Print(variables_,
+            "size += com.google.protobuf.CodedOutputStream.compute$cap_key_type$SizeNoTag(entry.getKey());\n");
+      }
+      if (!is_fixed_value) {
+        if (GetJavaType(ValueField(descriptor_)) == JAVATYPE_MESSAGE) {
+          printer->Print(
+            "size += com.google.protobuf.CodedOutputStream.computeMessageSizeNoTag(entry.getKey());\n");
+        } else {
+          printer->Print(variables_,
+            "size += com.google.protobuf.CodedOutputStream.compute$cap_value_type$SizeNoTag(entry.getValue());\n");
+        }
+      }
+      printer->Outdent();
+      printer->Print("}\n");
+    }
+    printer->Outdent();
+    printer->Outdent();
     printer->Print(
-        variables_,
-        "if (!internalGet$capitalized_name$().getMap().isEmpty()) {\n"
-        "  int dataSize = com.google.protobuf.CodedOutputStream.computeContainerTagSize(internalGet$capitalized_name$().getMap().size());\n"
-        "  for ($boxed_value_type$ value : internalGet$capitalized_name$().getMap().values()) {\n"
-        "    com.google.protobuf.MapEntry<$type_parameters$>\n"
-        "    $name$__ = $default_entry$.newBuilderForType()\n"
-        "        .setKey(entry.getKey())\n"
-        "        .setValue(entry.getValue())\n"
-        "        .build();\n"
-        "    dataSize += com.google.protobuf.CodedOutputStream.computeMessageSizeNoTag($name$__);\n"
         "  }\n"
-        "  size += $tag_size$;\n"
-        "  size += dataSize;\n"
         "}\n");
     return;
   }

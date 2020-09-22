@@ -70,8 +70,8 @@ void SetEnumVariables(const FieldDescriptor* descriptor, int messageBitIndex,
       static_cast<int32>(internal::WireFormat::MakeTag(descriptor)));
   (*variables)["tag_size"] = StrCat(
       internal::WireFormat::TagSize(descriptor->number(), GetType(descriptor)));
-  (*variables)["container_wire_type"] = StrCat(
-      internal::WireFormat::ContainerWireTypeForField(descriptor));
+  (*variables)["collection_wire_type"] = StrCat(
+      internal::WireFormat::CollectionWireTypeForField(descriptor));
   // TODO(birdo): Add @deprecated javadoc when generating javadoc is supported
   // by the proto compiler
   (*variables)["deprecation"] =
@@ -963,12 +963,12 @@ void RepeatedImmutableEnumFieldGenerator::GenerateParsingCodeFromPacked(
                  "input.popLimit(oldLimit);\n");
 }
 
-void RepeatedImmutableEnumFieldGenerator::GenerateParsingCodeFromOptimizedContainer(
+void RepeatedImmutableEnumFieldGenerator::GenerateParsingCodeFromOptimizedCollection(
     io::Printer* printer) const {
 
   printer->Print(
       variables_,
-      "int size = input.readContainerSize();\n"
+      "int size = input.readCollectionSize();\n"
       "if (!$get_mutable_bit_parser$ && size > 0) {\n"
       "  $name$_ = new java.util.ArrayList<java.lang.Integer>(size);\n"
       "  $set_mutable_bit_parser$;\n"
@@ -1007,13 +1007,13 @@ void RepeatedImmutableEnumFieldGenerator::GenerateParsingDoneCode(
 
 void RepeatedImmutableEnumFieldGenerator::GenerateSerializationCode(
     io::Printer* printer) const {
-  if (descriptor_->is_packed() || descriptor_->is_optimized_container()) {
+  if (descriptor_->is_packed() || descriptor_->is_optimized_collection()) {
     printer->Print(variables_,
                    "if ($name$_.size() > 0) {\n"
                    "  output.writeUInt32NoTag($tag$);\n");
-    if (descriptor_->is_optimized_container()) {
+    if (descriptor_->is_optimized_collection()) {
       printer->Print(variables_,
-                     "  output.writeContainerTag($name$_.size(), $container_wire_type$);\n");
+                     "  output.writeCollectionTag($name$_.size(), $collection_wire_type$);\n");
     } else {
       printer->Print(variables_,
                      "  output.writeUInt32NoTag($name$MemoizedSerializedSize);\n");
@@ -1044,10 +1044,10 @@ void RepeatedImmutableEnumFieldGenerator::GenerateSerializedSizeCode(
   }
   printer->Indent();
 
-  if (descriptor_->is_optimized_container()) {
+  if (descriptor_->is_optimized_collection()) {
     printer->Print(variables_,
                    "int dataSize = com.google.protobuf.CodedOutputStream\n"
-                   "    .computeContainerTagSize($name$_.size());\n");
+                   "    .computeCollectionTagSize($name$_.size());\n");
   } else {
     printer->Print("int dataSize = 0;\n");
   }
@@ -1060,7 +1060,7 @@ void RepeatedImmutableEnumFieldGenerator::GenerateSerializedSizeCode(
 
   printer->Print("size += dataSize;\n");
 
-  if (descriptor_->is_packed() || descriptor_->is_optimized_container()) {
+  if (descriptor_->is_packed() || descriptor_->is_optimized_collection()) {
     printer->Print(variables_, "size += $tag_size$;\n");
     if (descriptor_->is_packed()) {
       printer->Print(variables_,

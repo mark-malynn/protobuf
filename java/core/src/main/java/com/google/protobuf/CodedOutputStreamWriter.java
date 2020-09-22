@@ -31,6 +31,7 @@
 package com.google.protobuf;
 
 import static com.google.protobuf.Internal.checkNotNull;
+import static com.google.protobuf.WireFormat.WIRETYPE_COLLECTION;
 import static com.google.protobuf.WireFormat.WIRETYPE_LENGTH_DELIMITED;
 
 import java.io.IOException;
@@ -559,6 +560,19 @@ final class CodedOutputStreamWriter implements Writer {
     for (int i = 0; i < value.size(); ++i) {
       writeMessage(fieldNumber, value.get(i), schema);
     }
+  }
+
+  @Override
+  public void writeOptimizedCollectionList(int fieldNumber, List<ByteString> list) throws IOException {
+    for (ByteString value : list) {
+      writeOptimizedCollection(fieldNumber, value);
+    }
+  }
+
+  @Override
+  public void writeOptimizedCollection(int fieldNumber, ByteString value) throws IOException {
+    output.writeTag(fieldNumber, WIRETYPE_COLLECTION);
+    value.writeTo(output);
   }
 
   @Override

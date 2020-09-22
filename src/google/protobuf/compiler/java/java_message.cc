@@ -1242,16 +1242,16 @@ void ImmutableMessageGenerator::GenerateParsingConstructor(
           "}\n");
     }
 
-    if (field->is_container()) {
+    if (field->is_collection()) {
       // To make optimized_container = true wire compatible, we generate parsing code from a
       // optimized version of this field regardless of field->options().optimized_container().
       uint32 container_tag = WireFormatLite::MakeTag(
-          field->number(), WireFormatLite::WIRETYPE_CONTAINER);
+          field->number(), WireFormatLite::WIRETYPE_COLLECTION);
       printer->Print("case $tag$: {\n", "tag",
                      StrCat(static_cast<int32>(container_tag)));
       printer->Indent();
 
-      field_generators_.get(field).GenerateParsingCodeFromOptimizedContainer(printer);
+      field_generators_.get(field).GenerateParsingCodeFromOptimizedCollection(printer);
 
       printer->Outdent();
       printer->Print(

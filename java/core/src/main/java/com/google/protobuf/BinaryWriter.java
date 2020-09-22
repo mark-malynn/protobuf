@@ -38,6 +38,7 @@ import static com.google.protobuf.WireFormat.MAX_VARINT64_SIZE;
 import static com.google.protobuf.WireFormat.MESSAGE_SET_ITEM;
 import static com.google.protobuf.WireFormat.MESSAGE_SET_MESSAGE;
 import static com.google.protobuf.WireFormat.MESSAGE_SET_TYPE_ID;
+import static com.google.protobuf.WireFormat.WIRETYPE_COLLECTION;
 import static com.google.protobuf.WireFormat.WIRETYPE_END_GROUP;
 import static com.google.protobuf.WireFormat.WIRETYPE_FIXED32;
 import static com.google.protobuf.WireFormat.WIRETYPE_FIXED64;
@@ -912,6 +913,26 @@ abstract class BinaryWriter extends ByteOutput implements Writer {
       n += 1;
     }
     return n;
+  }
+
+  @Override
+  public final void writeOptimizedCollectionList(int fieldNumber, List<ByteString> list) throws IOException {
+    for (int i = list.size() - 1; i >= 0; i--) {
+      writeOptimizedCollection(fieldNumber, list.get(i));
+    }
+  }
+
+  @Override
+  public final void writeOptimizedCollection(int fieldNumber, ByteString value) throws IOException {
+    try {
+      value.writeToReverse(this);
+    } catch (IOException e) {
+      // Should never happen since the writer does not throw.
+      throw new RuntimeException(e);
+    }
+
+    requireSpace(MAX_VARINT32_SIZE);
+    writeTag(fieldNumber, WIRETYPE_COLLECTION);
   }
 
   /** Writer that uses safe operations on target array. */

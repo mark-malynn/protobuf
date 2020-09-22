@@ -58,10 +58,12 @@ public final class WireFormat {
   public static final int WIRETYPE_START_GROUP = 3;
   public static final int WIRETYPE_END_GROUP = 4;
   public static final int WIRETYPE_FIXED32 = 5;
-  public static final int WIRETYPE_CONTAINER = 6;
+  public static final int WIRETYPE_COLLECTION = 6;
 
   static final int TAG_TYPE_BITS = 3;
   static final int TAG_TYPE_MASK = (1 << TAG_TYPE_BITS) - 1;
+ 
+  static final int MAX_COLLECTION_SIZE = 0x1fffffff;
 
   /** Given a tag value, determines the wire type (the lower 3 bits). */
   public static int getTagWireType(final int tag) {
@@ -78,21 +80,47 @@ public final class WireFormat {
     return (fieldNumber << TAG_TYPE_BITS) | wireType;
   }
   
-  /** Makes a container tag. */
-  static long makeContainerTag(final int size, final int wireType) {
-    return (((long)size) << TAG_TYPE_BITS) | wireType;
+  /** Makes a collection tag. */
+  static int makeCollectionTag(final int size, final int wireType) {
+    if (size > MAX_COLLECTION_SIZE) {
+      throw new IllegalArgumentException("collection size not supported: " + size);
+    }
+    return (size << TAG_TYPE_BITS) | wireType;
   }
 
   /**
-   * Given a count tag value, returns the count value. This value should fit in an int.
-   * CodedInputStream will cast it to int after doing validation.
+   * Given a collection tag, returns the size of the collection.
    */
-  static long getContainerTagSize(final long containerTag) {
-    return containerTag >>> TAG_TYPE_BITS;
+  static int getCollectionTagSize(final int collectionTag) {
+    return collectionTag >>> TAG_TYPE_BITS;
   }
-  
-  static int getContainerTagWireType(final long containerTag) {
-    return (int)(containerTag & TAG_TYPE_MASK);
+
+  /**
+   * Given a collection tag, returns the wire type for entries in the collection.
+   */
+  static int getCollectionTagWireType(final int collectionTag) {
+    return collectionTag & TAG_TYPE_MASK;
+  }
+
+  /**
+   * Makes the map tag for the given key/value wire types.
+   */
+  static int makeMapTag(final int keyWireType, final int valueWireType) {
+    return (keyWireType << TAG_TYPE_BITS) | valueWireType;
+  }
+
+  /**
+   * Returns the key wire type for the given map tag.
+   */
+  static int getMapTagKeyWireType(final int mapTag) {
+    return mapTag >>> TAG_TYPE_BITS;
+  }
+
+  /**
+   * Returns the value wire type for the given map tag.
+   */
+  static int getMapTagValueWireType(final int mapTag) {
+    return mapTag & TAG_TYPE_MASK;
   }
 
   /**

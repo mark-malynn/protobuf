@@ -189,13 +189,13 @@ static inline void ReportUnexpectedPackedFieldsCall(io::Printer* printer) {
              << "called on field generator that does not support packing.";
 }
 
-static inline void ReportUnexpectedOptimizedContainerFieldsCall(io::Printer* printer) {
+static inline void ReportUnexpectedOptimizedCollectionFieldsCall(io::Printer* printer) {
   // Reaching here indicates a bug. Cases are:
   //   - This FieldGenerator should support optimized containers,
   //     but this method should be overridden.
   //   - This FieldGenerator doesn't support optimized containers, and this method
   //     should never have been called.
-  GOOGLE_LOG(FATAL) << "GenerateParsingCodeFromOptimizedContainer() "
+  GOOGLE_LOG(FATAL) << "GenerateParsingCodeFromOptimizedCollection() "
              << "called on field generator that does not support optimized containers.";
 }
 
@@ -208,9 +208,9 @@ void ImmutableFieldGenerator::GenerateParsingCodeFromPacked(
   ReportUnexpectedPackedFieldsCall(printer);
 }
 
-void ImmutableFieldGenerator::GenerateParsingCodeFromOptimizedContainer(
+void ImmutableFieldGenerator::GenerateParsingCodeFromOptimizedCollection(
     io::Printer* printer) const {
-  ReportUnexpectedOptimizedContainerFieldsCall(printer);
+  ReportUnexpectedOptimizedCollectionFieldsCall(printer);
 }
 
 ImmutableFieldLiteGenerator::~ImmutableFieldLiteGenerator() {}

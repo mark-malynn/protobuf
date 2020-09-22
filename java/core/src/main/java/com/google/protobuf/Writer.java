@@ -89,7 +89,7 @@ interface Writer {
   /** Writes a field of type {@link FieldType#BYTES}. */
   void writeBytes(int fieldNumber, ByteString value) throws IOException;
 
-  /** Writes a field of type {@link FieldType#UINT32}. */
+    /** Writes a field of type {@link FieldType#UINT32}. */
   void writeUInt32(int fieldNumber, int value) throws IOException;
 
   /** Writes a field of type {@link FieldType#SINT32}. */
@@ -103,6 +103,9 @@ interface Writer {
 
   /** Writes a field of type {@link FieldType#MESSAGE}. */
   void writeMessage(int fieldNumber, Object value, Schema schema) throws IOException;
+
+  /** Writes a field that is an optimized list/map (encoded in the given ByteString value). */
+  void writeOptimizedCollection(int fieldNumber, ByteString value) throws IOException;
 
   /**
    * Writes a field of type {@link FieldType#GROUP}.
@@ -189,6 +192,9 @@ interface Writer {
 
   /** Writes a list field of type {@link FieldType#MESSAGE}. */
   void writeMessageList(int fieldNumber, List<?> value, Schema schema) throws IOException;
+
+  /** Writes a list of optimized collections. */
+  void writeOptimizedCollectionList(int fieldNumber, List<ByteString> value) throws IOException;
 
   /**
    * Writes a list field of type {@link FieldType#GROUP}.

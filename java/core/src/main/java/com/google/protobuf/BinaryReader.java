@@ -32,7 +32,7 @@ package com.google.protobuf;
 
 import static com.google.protobuf.WireFormat.FIXED32_SIZE;
 import static com.google.protobuf.WireFormat.FIXED64_SIZE;
-import static com.google.protobuf.WireFormat.WIRETYPE_CONTAINER;
+import static com.google.protobuf.WireFormat.WIRETYPE_COLLECTION;
 import static com.google.protobuf.WireFormat.WIRETYPE_END_GROUP;
 import static com.google.protobuf.WireFormat.WIRETYPE_FIXED32;
 import static com.google.protobuf.WireFormat.WIRETYPE_FIXED64;
@@ -145,7 +145,6 @@ abstract class BinaryReader implements Reader {
           skipBytes(FIXED64_SIZE);
           return true;
         case WIRETYPE_LENGTH_DELIMITED:
-        case WIRETYPE_CONTAINER:
           skipBytes(readVarint32());
           return true;
         case WIRETYPE_FIXED32:
@@ -154,6 +153,9 @@ abstract class BinaryReader implements Reader {
         case WIRETYPE_START_GROUP:
           skipGroup();
           return true;
+        case WIRETYPE_COLLECTION:
+          // TODO: implement me
+          throw InvalidProtocolBufferException.invalidWireType();
         default:
           throw InvalidProtocolBufferException.invalidWireType();
       }
@@ -390,7 +392,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -423,7 +425,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -462,7 +464,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -495,7 +497,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -534,7 +536,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -567,7 +569,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -606,7 +608,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -639,7 +641,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -678,7 +680,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -711,7 +713,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -750,7 +752,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -783,7 +785,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -822,7 +824,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -855,7 +857,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -894,7 +896,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -927,7 +929,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -949,7 +951,7 @@ abstract class BinaryReader implements Reader {
 
     public void readStringListInternal(List<String> target, boolean requireUtf8)
         throws IOException {
-      // TODO: support WIRETYPE_CONTAINER
+      // TODO: support WIRETYPE_COLLECTION
       if (WireFormat.getTagWireType(tag) != WIRETYPE_LENGTH_DELIMITED) {
         throw InvalidProtocolBufferException.invalidWireType();
       }
@@ -1002,7 +1004,7 @@ abstract class BinaryReader implements Reader {
     public <T> void readMessageList(
         List<T> target, Schema<T> schema, ExtensionRegistryLite extensionRegistry)
         throws IOException {
-      // TODO: support WIRETYPE_CONTAINER
+      // TODO: support WIRETYPE_COLLECTION
       if (WireFormat.getTagWireType(tag) != WIRETYPE_LENGTH_DELIMITED) {
         throw InvalidProtocolBufferException.invalidWireType();
       }
@@ -1059,7 +1061,7 @@ abstract class BinaryReader implements Reader {
 
     @Override
     public void readBytesList(List<ByteString> target) throws IOException {
-      // TODO: support WIRETYPE_CONTAINER
+      // TODO: support WIRETYPE_COLLECTION
       if (WireFormat.getTagWireType(tag) != WIRETYPE_LENGTH_DELIMITED) {
         throw InvalidProtocolBufferException.invalidWireType();
       }
@@ -1109,7 +1111,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -1141,7 +1143,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -1179,7 +1181,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -1211,7 +1213,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -1250,7 +1252,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -1283,7 +1285,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -1322,7 +1324,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -1355,7 +1357,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -1393,7 +1395,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -1425,7 +1427,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -1463,7 +1465,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -1495,7 +1497,7 @@ abstract class BinaryReader implements Reader {
                 return;
               }
             }
-          case WIRETYPE_CONTAINER: {
+          case WIRETYPE_COLLECTION: {
             // TODO: implement me!
             throw InvalidProtocolBufferException.invalidWireType();
           }
@@ -1512,7 +1514,7 @@ abstract class BinaryReader implements Reader {
         MapEntryLite.Metadata<K, V> metadata,
         ExtensionRegistryLite extensionRegistry)
         throws IOException {
-      // TODO: support WIRETYPE_CONTAINER
+      // TODO: support WIRETYPE_COLLECTION
       requireWireType(WIRETYPE_LENGTH_DELIMITED);
       int size = readVarint32();
       requireBytes(size);

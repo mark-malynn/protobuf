@@ -697,13 +697,13 @@ class PROTOBUF_EXPORT FieldDescriptor {
   bool is_packable() const;  // shorthand for is_repeated() &&
                              //               IsTypePackable(type())
   bool is_packed() const;    // shorthand for is_packable() &&
-                             //               !is_optimized_container() &&
+                             //               !is_optimized_collection() &&
                              //               options().packed()
   bool is_map() const;       // shorthand for type() == TYPE_MESSAGE &&
                              // message_type()->options().map_entry()
-  bool is_container() const; // true, if field is an optimizable container
-  bool is_optimized_container() const; // true, if field is to be serialized
-                                       // using WIRETYPE_CONTAINER.
+  bool is_collection() const; // true, if field is an optimizable container
+  bool is_optimized_collection() const; // true, if field is to be serialized
+                                        // using WIRETYPE_COLLECTION.
 
   // Returns true if this field was syntactically written with "optional" in the
   // .proto file. Excludes singular proto3 fields that do not have a label.
@@ -2194,7 +2194,7 @@ inline bool FieldDescriptor::is_map() const {
   return type() == TYPE_MESSAGE && is_map_message_type();
 }
 
-inline bool FieldDescriptor::is_container() const {
+inline bool FieldDescriptor::is_collection() const {
   return (is_repeated() && type() != TYPE_GROUP) || is_map();
 }
 

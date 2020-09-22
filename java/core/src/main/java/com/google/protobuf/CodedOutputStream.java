@@ -182,7 +182,7 @@ public abstract class CodedOutputStream extends ByteOutput {
     serializationDeterministic = true;
   }
 
-  boolean isSerializationDeterministic() {
+  public boolean isSerializationDeterministic() {
     return serializationDeterministic;
   }
 
@@ -229,9 +229,21 @@ public abstract class CodedOutputStream extends ByteOutput {
   // Abstract to avoid overhead of additional virtual method calls.
   public abstract void writeTag(int fieldNumber, int wireType) throws IOException;
 
-  /** Encode and write a container tag. */
-  public final void writeContainerTag(int count, int wireType) throws IOException {
-    writeUInt64NoTag(WireFormat.makeContainerTag(count, wireType));
+  /** Encode and write a collection tag. */
+  public final void writeCollectionTag(int count, int wireType) throws IOException {
+    writeUInt32NoTag(WireFormat.makeCollectionTag(count, wireType));
+  }
+
+  /** Encode and write a map tag. */
+  public final void writeMapTag(int keyWireType, int valueWireType) throws IOException {
+    writeUInt32NoTag(WireFormat.makeMapTag(keyWireType, valueWireType));
+  }
+
+  /** Encode and write the header for an 'optimized map' */
+  public final void writeOptimizedMapHeader(int fieldNumber, int mapSize, int mapTag) throws IOException {
+    writeTag(fieldNumber, WireFormat.WIRETYPE_COLLECTION);
+    writeCollectionTag(mapSize, WireFormat.WIRETYPE_COLLECTION);
+    writeUInt32NoTag(mapTag);
   }
 
   /** Write an {@code int32} field, including tag, to the stream. */
@@ -715,9 +727,9 @@ public abstract class CodedOutputStream extends ByteOutput {
     return computeUInt32SizeNoTag(WireFormat.makeTag(fieldNumber, 0));
   }
 
-  /** Compute the number of bytes that would be needed to encode a container tag. */
-  public static int computeContainerTagSize(final int count) {
-    return computeUInt64SizeNoTag(WireFormat.makeContainerTag(count, 0));
+  /** Compute the number of bytes that would be needed to encode a collection tag. */
+  public static int computeCollectionTagSize(final int count) {
+    return computeUInt32SizeNoTag(WireFormat.makeCollectionTag(count, 0));
   }
 
   /**

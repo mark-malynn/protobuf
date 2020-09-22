@@ -106,7 +106,7 @@ class PROTOBUF_EXPORT WireFormatLite {
     WIRETYPE_START_GROUP = 3,
     WIRETYPE_END_GROUP = 4,
     WIRETYPE_FIXED32 = 5,
-    WIRETYPE_CONTAINER = 6,
+    WIRETYPE_COLLECTION = 6,
   };
 
   // Lite alternative to FieldDescriptor::Type.  Must be kept in sync.

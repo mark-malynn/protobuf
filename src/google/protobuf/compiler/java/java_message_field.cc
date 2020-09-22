@@ -61,8 +61,8 @@ void SetMessageVariables(const FieldDescriptor* descriptor, int messageBitIndex,
       static_cast<int32>(internal::WireFormat::MakeTag(descriptor)));
   (*variables)["tag_size"] = StrCat(
       internal::WireFormat::TagSize(descriptor->number(), GetType(descriptor)));
-  (*variables)["container_wire_type"] = StrCat(
-      internal::WireFormat::ContainerWireTypeForField(descriptor));
+  (*variables)["collection_wire_type"] = StrCat(
+      internal::WireFormat::CollectionWireTypeForField(descriptor));
   (*variables)["type"] =
       name_resolver->GetImmutableClassName(descriptor->message_type());
   (*variables)["mutable_type"] =
@@ -1317,12 +1317,12 @@ void RepeatedImmutableMessageFieldGenerator::GenerateParsingCode(
   }
 }
 
-void RepeatedImmutableMessageFieldGenerator::GenerateParsingCodeFromOptimizedContainer(
+void RepeatedImmutableMessageFieldGenerator::GenerateParsingCodeFromOptimizedCollection(
     io::Printer* printer) const {
 
   printer->Print(
       variables_,
-      "int size = input.readContainerSize();\n"
+      "int size = input.readCollectionSize();\n"
       "if (!$get_mutable_bit_parser$ && size > 0) {\n"
       "  $name$_ = new java.util.ArrayList<$type$>(size);\n"
       "  $set_mutable_bit_parser$;\n"
@@ -1343,11 +1343,11 @@ void RepeatedImmutableMessageFieldGenerator::GenerateParsingDoneCode(
 
 void RepeatedImmutableMessageFieldGenerator::GenerateSerializationCode(
     io::Printer* printer) const {
-  if (descriptor_->is_optimized_container()) {
+  if (descriptor_->is_optimized_collection()) {
     printer->Print(variables_,
                    "if ($name$_.size() > 0) {\n"
                    "  output.writeUInt32NoTag($tag$);\n"
-                   "  output.writeContainerTag($name$_.size(), $container_wire_type$);\n"
+                   "  output.writeCollectionTag($name$_.size(), $collection_wire_type$);\n"
                    "  for (int i = 0; i < $name$_.size(); i++) {\n"
                    "    output.writeMessageNoTag($name$_.get(i));\n"
                    "  }\n"
@@ -1363,17 +1363,16 @@ void RepeatedImmutableMessageFieldGenerator::GenerateSerializationCode(
 void RepeatedImmutableMessageFieldGenerator::GenerateSerializedSizeCode(
     io::Printer* printer) const {
 
-  if (descriptor_->is_optimized_container()) {
+  if (descriptor_->is_optimized_collection()) {
     printer->Print(
         variables_,
-        "if (!$name$_.isEmpty()) {\n"
-        "  int dataSize = com.google.protobuf.CodedOutputStream.computeContainerTagSize($name$_.size());\n"
+        "if ($name$_.size() > 0) {\n"
+        "  size += $tag_size$;\n"
+        "  size += com.google.protobuf.CodedOutputStream.computeCollectionTagSize($name$_.size());\n"
         "  for (int i = 0; i < $name$_.size(); i++) {\n"
-        "    dataSize += com.google.protobuf.CodedOutputStream\n"
+        "    size += com.google.protobuf.CodedOutputStream\n"
         "      .computeMessageSizeNoTag($name$_.get(i));\n"
         "  }\n"
-        "  size += $tag_size$;\n"
-        "  size += dataSize;\n"
         "}\n");
     return;
   }

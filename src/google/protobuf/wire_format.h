@@ -83,7 +83,7 @@ class PROTOBUF_EXPORT WireFormat {
       const FieldDescriptor* field);
 
   // Given a field return its container WireType
-  static inline WireFormatLite::WireType ContainerWireTypeForField(
+  static inline WireFormatLite::WireType CollectionWireTypeForField(
       const FieldDescriptor* field);
 
   // Given a FieldDescriptor::Type return its WireType
@@ -329,8 +329,8 @@ class PROTOBUF_EXPORT UnknownFieldSetFieldSkipper : public FieldSkipper {
 inline WireFormatLite::WireType WireFormat::WireTypeForField(
     const FieldDescriptor* field) {
   // optimized container takes precedence over packed.
-  if (field->is_optimized_container()) {
-    return WireFormatLite::WIRETYPE_CONTAINER;
+  if (field->is_optimized_collection()) {
+    return WireFormatLite::WIRETYPE_COLLECTION;
   } else if (field->is_packed()) {
     return WireFormatLite::WIRETYPE_LENGTH_DELIMITED;
   } else {
@@ -338,7 +338,7 @@ inline WireFormatLite::WireType WireFormat::WireTypeForField(
   }
 }
 
-inline WireFormatLite::WireType WireFormat::ContainerWireTypeForField(
+inline WireFormatLite::WireType WireFormat::CollectionWireTypeForField(
     const FieldDescriptor* field) {
   return WireTypeForFieldType(field->type());
 }

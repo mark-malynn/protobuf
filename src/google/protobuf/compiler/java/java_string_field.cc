@@ -74,8 +74,8 @@ void SetPrimitiveVariables(const FieldDescriptor* descriptor,
       StrCat(static_cast<int32>(WireFormat::MakeTag(descriptor)));
   (*variables)["tag_size"] = StrCat(
       WireFormat::TagSize(descriptor->number(), GetType(descriptor)));
-  (*variables)["container_wire_type"] = StrCat(
-      internal::WireFormat::ContainerWireTypeForField(descriptor));
+  (*variables)["collection_wire_type"] = StrCat(
+      internal::WireFormat::CollectionWireTypeForField(descriptor));
   (*variables)["null_check"] =
       "  if (value == null) {\n"
       "    throw new NullPointerException();\n"
@@ -992,12 +992,12 @@ void RepeatedImmutableStringFieldGenerator::GenerateParsingCode(
   }
 }
 
-void RepeatedImmutableStringFieldGenerator::GenerateParsingCodeFromOptimizedContainer(
+void RepeatedImmutableStringFieldGenerator::GenerateParsingCodeFromOptimizedCollection(
     io::Printer* printer) const {
 
   printer->Print(
       variables_,
-      "int size = input.readContainerSize();\n"
+      "int size = input.readCollectionSize();\n"
       "if (!$get_mutable_bit_parser$ && size > 0) {\n"
       "  $name$_ = new com.google.protobuf.LazyStringArrayList(size);\n"
       "  $set_mutable_bit_parser$;\n"
@@ -1025,11 +1025,11 @@ void RepeatedImmutableStringFieldGenerator::GenerateParsingDoneCode(
 
 void RepeatedImmutableStringFieldGenerator::GenerateSerializationCode(
     io::Printer* printer) const {
-  if (descriptor_->is_optimized_container()) {
+  if (descriptor_->is_optimized_collection()) {
     printer->Print(variables_,
                    "if ($name$_.size() > 0) {\n"
                    "  output.writeUInt32NoTag($tag$);\n"
-                   "  output.writeContainerTag($name$_.size(), $container_wire_type$);\n"
+                   "  output.writeCollectionTag($name$_.size(), $collection_wire_type$);\n"
                    "  for (int i = 0; i < $name$_.size(); i++) {\n"
                    "    writeStringNoTag(output, $name$_.get(i));\n"
                    "  }\n"
@@ -1044,16 +1044,15 @@ void RepeatedImmutableStringFieldGenerator::GenerateSerializationCode(
 
 void RepeatedImmutableStringFieldGenerator::GenerateSerializedSizeCode(
     io::Printer* printer) const {
-  if (descriptor_->is_optimized_container()) {
+  if (descriptor_->is_optimized_collection()) {
     printer->Print(
         variables_,
-        "if (!$name$_.isEmpty()) {\n"
-        "  int dataSize = com.google.protobuf.CodedOutputStream.computeContainerTagSize($name$_.size());\n"
-        "  for (int i = 0; i < $name$_.size(); i++) {\n"
-        "    dataSize += computeStringSizeNoTag($name$_.getRaw(i));\n"
-        "  }\n"
+        "if ($name$_.size() > 0) {\n"
         "  size += $tag_size$;\n"
-        "  size += dataSize;\n"
+        "  size += com.google.protobuf.CodedOutputStream.computeCollectionTagSize($name$_.size());\n"
+        "  for (int i = 0; i < $name$_.size(); i++) {\n"
+        "    size += computeStringSizeNoTag($name$_.getRaw(i));\n"
+        "  }\n"
         "}\n");
     return;
   }

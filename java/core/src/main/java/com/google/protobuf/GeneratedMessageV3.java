@@ -3254,10 +3254,10 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
       MapField<Integer, V> field,
       MapEntry<Integer, V> defaultEntry,
       int fieldNumber,
-      int containerWireType) throws IOException {
+      int collectionWireType) throws IOException {
     Map<Integer, V> m = field.getMap();
     if (!out.isSerializationDeterministic()) {
-      serializeOptimizedMapTo(out, m, defaultEntry, fieldNumber, containerWireType);
+      serializeOptimizedMapTo(out, m, defaultEntry, fieldNumber, collectionWireType);
       return;
     }
     // Sorting the unboxed keys and then look up the values during serialization is 2x faster
@@ -3268,7 +3268,7 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
       keys[index++] = k;
     }
     Arrays.sort(keys);
-    writeOptimizedMapHeaderTo(out, fieldNumber, containerWireType, keys.length);
+    writeOptimizedMapHeaderTo(out, fieldNumber, collectionWireType, keys.length);
     for (int key : keys) {
       out.writeMessageNoTag(
           defaultEntry.newBuilderForType()
@@ -3283,11 +3283,11 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
       MapField<Long, V> field,
       MapEntry<Long, V> defaultEntry,
       int fieldNumber,
-      int containerWireType)
+      int collectionWireType)
       throws IOException {
     Map<Long, V> m = field.getMap();
     if (!out.isSerializationDeterministic()) {
-      serializeOptimizedMapTo(out, m, defaultEntry, fieldNumber, containerWireType);
+      serializeOptimizedMapTo(out, m, defaultEntry, fieldNumber, collectionWireType);
       return;
     }
 
@@ -3297,7 +3297,7 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
       keys[index++] = k;
     }
     Arrays.sort(keys);
-    writeOptimizedMapHeaderTo(out, fieldNumber, containerWireType, keys.length);
+    writeOptimizedMapHeaderTo(out, fieldNumber, collectionWireType, keys.length);
     for (long key : keys) {
       out.writeMessageNoTag(
           defaultEntry.newBuilderForType()
@@ -3312,11 +3312,11 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
       MapField<String, V> field,
       MapEntry<String, V> defaultEntry,
       int fieldNumber,
-      int containerWireType)
+      int collectionWireType)
       throws IOException {
     Map<String, V> m = field.getMap();
     if (!out.isSerializationDeterministic()) {
-      serializeOptimizedMapTo(out, m, defaultEntry, fieldNumber, containerWireType);
+      serializeOptimizedMapTo(out, m, defaultEntry, fieldNumber, collectionWireType);
       return;
     }
 
@@ -3325,7 +3325,7 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
     String[] keys = new String[m.size()];
     keys = m.keySet().toArray(keys);
     Arrays.sort(keys);
-    writeOptimizedMapHeaderTo(out, fieldNumber, containerWireType, keys.length);
+    writeOptimizedMapHeaderTo(out, fieldNumber, collectionWireType, keys.length);
     for (String key : keys) {
       out.writeMessageNoTag(
           defaultEntry.newBuilderForType()
@@ -3340,9 +3340,9 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
       Map<K, V> m,
       MapEntry<K, V> defaultEntry,
       int fieldNumber,
-      int containerWireType)
+      int collectionWireType)
       throws IOException {
-    writeOptimizedMapHeaderTo(out, fieldNumber, containerWireType, m.size());
+    writeOptimizedMapHeaderTo(out, fieldNumber, collectionWireType, m.size());
     for (Map.Entry<K, V> entry : m.entrySet()) {
       out.writeMessageNoTag(
           defaultEntry.newBuilderForType()
@@ -3355,11 +3355,12 @@ public abstract class GeneratedMessageV3 extends AbstractMessage
   private static void writeOptimizedMapHeaderTo(
       CodedOutputStream out, 
       int fieldNumber, 
-      int containerWireType, 
-      int entryCount) 
+      int entryCount,
+      int mapTag)
       throws IOException {
-    out.writeTag(fieldNumber, WireFormat.WIRETYPE_CONTAINER);
-    out.writeContainerTag(entryCount, containerWireType);
+    out.writeTag(fieldNumber, WireFormat.WIRETYPE_COLLECTION);
+    out.writeCollectionTag(entryCount, WireFormat.WIRETYPE_COLLECTION);
+    out.writeUInt32NoTag(mapTag);
   }
 }
 

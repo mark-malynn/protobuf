@@ -249,6 +249,60 @@ public abstract class CodedInputStream {
   public abstract void skipMessage(CodedOutputStream output) throws IOException;
 
 
+  /**
+   * Skips the data of a collection.
+   * Assumes the field tag has already been processed.
+   */
+  protected final void skipCollectionData() throws IOException {
+    int collectionTag = readCollectionTag();
+    int collectionTagWireType = WireFormat.getCollectionTagWireType(collectionTag);
+    int collectionSize = WireFormat.getCollectionTagSize(collectionTag);
+    if (collectionTagWireType != WireFormat.WIRETYPE_COLLECTION) {
+      for (int i = 0; i < collectionSize; ++i) {
+        skipField(collectionTagWireType);
+      }
+    } else {
+      // FYI: collections with an entry wire type of collection are maps
+      int mapTag = readMapTag();
+      int keyWireType = WireFormat.getMapTagKeyWireType(mapTag);
+      int valueWireType = WireFormat.getMapTagValueWireType(mapTag);
+      for (int i= 0; i < collectionSize; ++i) {
+        skipField(keyWireType);
+        skipField(valueWireType);
+      }
+    }
+  }
+
+  /**
+   * Skips the data of a collection writing skipped data to given output stream.
+   * Assumes the field tag has already been processed.<p>
+   *
+   * FYI: method is packaged scope so that it can be used by UnknownFieldSet.
+   */
+  final void skipCollectionData(CodedOutputStream output) throws IOException {
+    int collectionTag = readCollectionTag();
+    output.writeUInt32NoTag(collectionTag);
+    int collectionTagWireType = WireFormat.getCollectionTagWireType(collectionTag);
+    int collectionSize = WireFormat.getCollectionTagSize(collectionTag);
+
+    if (collectionTagWireType != WireFormat.WIRETYPE_COLLECTION) {
+      for (int i = 0; i < collectionSize; ++i) {
+        skipField(collectionTagWireType, output);
+      }
+    } else {
+      // FYI: collections with an entry wire type of collection are maps
+      int mapTag = readMapTag();
+      output.writeUInt32NoTag(mapTag);
+      int keyWireType = WireFormat.getMapTagKeyWireType(mapTag);
+      int valueWireType = WireFormat.getMapTagValueWireType(mapTag);
+      for (int i = 0; i < collectionSize; ++i) {
+        skipField(keyWireType, output);
+        skipField(valueWireType, output);
+      }
+    }
+  }
+
+
   // -----------------------------------------------------------------
 
   /** Read a {@code double} field value from the stream. */
@@ -578,20 +632,20 @@ public abstract class CodedInputStream {
   }
 
   /**
-   * Attempt to read a container tag. Container tags are used by 
-   * WIRETYPE_CONTAINER so they can extract both the number of entries
+   * Attempt to read a collection tag. Collection tags are used by
+   * WIRETYPE_COLLECTION so they can extract both the number of entries
    * and the wire type of said entries.
    */
-  public long readContainerTag() throws IOException {
-    return readRawVarint64();
+  public int readCollectionTag() throws IOException {
+    return readRawVarint32();
   }
 
-  public int readContainerSize() throws IOException {
-    long count = WireFormat.getContainerTagSize(readContainerTag());
-    if (count > Integer.MAX_VALUE) {
-      throw InvalidProtocolBufferException.invalidCountTag();
-    }
-    return (int)count;
+  public int readCollectionSize() throws IOException {
+    return WireFormat.getCollectionTagSize(readCollectionTag());
+  }
+
+  public int readMapTag() throws IOException {
+    return readRawVarint32();
   }
 
   /**
@@ -680,16 +734,8 @@ public abstract class CodedInputStream {
         case WireFormat.WIRETYPE_FIXED32:
           skipRawBytes(FIXED32_SIZE);
           return true;
-        case WireFormat.WIRETYPE_CONTAINER:
-          long countTag = readContainerTag();
-          int countTagWireType = WireFormat.getContainerTagWireType(countTag);
-          long containerSize = WireFormat.getContainerTagSize(countTag);
-          if (containerSize > Integer.MAX_VALUE) {
-            throw InvalidProtocolBufferException.invalidCountTag();
-          }
-          for (int i= 0; i < containerSize; ++i) {
-            skipField(countTagWireType);
-          }
+        case WireFormat.WIRETYPE_COLLECTION:
+          skipCollectionData();
           return true;
         default:
           throw InvalidProtocolBufferException.invalidWireType();
@@ -714,7 +760,6 @@ public abstract class CodedInputStream {
             return true;
           }
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
-        case WireFormat.WIRETYPE_CONTAINER:
           {
             ByteString value = readBytes();
             output.writeRawVarint32(tag);
@@ -741,6 +786,12 @@ public abstract class CodedInputStream {
             int value = readRawLittleEndian32();
             output.writeRawVarint32(tag);
             output.writeFixed32NoTag(value);
+            return true;
+          }
+        case WireFormat.WIRETYPE_COLLECTION:
+          {
+            output.writeUInt32NoTag(tag);
+            skipCollectionData(output);
             return true;
           }
         default:
@@ -1394,7 +1445,6 @@ public abstract class CodedInputStream {
           skipRawBytes(FIXED64_SIZE);
           return true;
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
-        case WireFormat.WIRETYPE_CONTAINER:
           skipRawBytes(readRawVarint32());
           return true;
         case WireFormat.WIRETYPE_START_GROUP:
@@ -1406,6 +1456,9 @@ public abstract class CodedInputStream {
           return false;
         case WireFormat.WIRETYPE_FIXED32:
           skipRawBytes(FIXED32_SIZE);
+          return true;
+        case WireFormat.WIRETYPE_COLLECTION:
+          skipCollectionData();
           return true;
         default:
           throw InvalidProtocolBufferException.invalidWireType();
@@ -1430,7 +1483,6 @@ public abstract class CodedInputStream {
             return true;
           }
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
-        case WireFormat.WIRETYPE_CONTAINER:
           {
             ByteString value = readBytes();
             output.writeRawVarint32(tag);
@@ -1457,6 +1509,12 @@ public abstract class CodedInputStream {
             int value = readRawLittleEndian32();
             output.writeRawVarint32(tag);
             output.writeFixed32NoTag(value);
+            return true;
+          }
+        case WireFormat.WIRETYPE_COLLECTION:
+          {
+            output.writeUInt32NoTag(tag);
+            skipCollectionData(output);
             return true;
           }
         default:
@@ -2123,7 +2181,6 @@ public abstract class CodedInputStream {
           skipRawBytes(FIXED64_SIZE);
           return true;
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
-        case WireFormat.WIRETYPE_CONTAINER:
           skipRawBytes(readRawVarint32());
           return true;
         case WireFormat.WIRETYPE_START_GROUP:
@@ -2135,6 +2192,9 @@ public abstract class CodedInputStream {
           return false;
         case WireFormat.WIRETYPE_FIXED32:
           skipRawBytes(FIXED32_SIZE);
+          return true;
+        case WireFormat.WIRETYPE_COLLECTION:
+          skipCollectionData();
           return true;
         default:
           throw InvalidProtocolBufferException.invalidWireType();
@@ -2159,7 +2219,6 @@ public abstract class CodedInputStream {
             return true;
           }
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
-        case WireFormat.WIRETYPE_CONTAINER:
           {
             ByteString value = readBytes();
             output.writeRawVarint32(tag);
@@ -2186,6 +2245,12 @@ public abstract class CodedInputStream {
             int value = readRawLittleEndian32();
             output.writeRawVarint32(tag);
             output.writeFixed32NoTag(value);
+            return true;
+          }
+        case WireFormat.WIRETYPE_COLLECTION:
+          {
+            output.writeUInt32NoTag(tag);
+            skipCollectionData(output);
             return true;
           }
         default:
@@ -3247,7 +3312,6 @@ public abstract class CodedInputStream {
           skipRawBytes(FIXED64_SIZE);
           return true;
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
-        case WireFormat.WIRETYPE_CONTAINER:
           skipRawBytes(readRawVarint32());
           return true;
         case WireFormat.WIRETYPE_START_GROUP:
@@ -3259,6 +3323,9 @@ public abstract class CodedInputStream {
           return false;
         case WireFormat.WIRETYPE_FIXED32:
           skipRawBytes(FIXED32_SIZE);
+          return true;
+        case WireFormat.WIRETYPE_COLLECTION:
+          skipCollectionData();
           return true;
         default:
           throw InvalidProtocolBufferException.invalidWireType();
@@ -3283,7 +3350,6 @@ public abstract class CodedInputStream {
             return true;
           }
         case WireFormat.WIRETYPE_LENGTH_DELIMITED:
-        case WireFormat.WIRETYPE_CONTAINER:
           {
             ByteString value = readBytes();
             output.writeRawVarint32(tag);
@@ -3310,6 +3376,12 @@ public abstract class CodedInputStream {
             int value = readRawLittleEndian32();
             output.writeRawVarint32(tag);
             output.writeFixed32NoTag(value);
+            return true;
+          }
+        case WireFormat.WIRETYPE_COLLECTION:
+          {
+            output.writeUInt32NoTag(tag);
+            skipCollectionData(output);
             return true;
           }
         default:

@@ -74,7 +74,7 @@ inline bool is_packable(WireFormatLite::WireType type) {
     case WireFormatLite::WIRETYPE_LENGTH_DELIMITED:
     case WireFormatLite::WIRETYPE_START_GROUP:
     case WireFormatLite::WIRETYPE_END_GROUP:
-    case WireFormatLite::WIRETYPE_CONTAINER:
+    case WireFormatLite::WIRETYPE_COLLECTION:
       return false;
 
       // Do not add a default statement. Let the compiler complain when someone
